@@ -1,0 +1,2536 @@
+<!DOCTYPE html>
+<html><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta content="width=1024" name="viewport">
+    
+    
+    <title>Запускаем IBM OS/2 1.0 в виртуальной машине: почему это сложно сделать / Хабрахабр</title>
+    
+    <meta name="yandex-verification" content="67d46b975fa41645"> <!-- яндекс вебмастер - верификация -->
+
+    <meta name="description" content="Почему OS/2 сложно запустить в виртуальной среде?
+Из-за определённых причин OS/2 очень сложно заставить работать в виртуальной машине; гораздо сложнее, чем DOS, Windows 3.x, Windows NT, Windows 95...">    
+    <meta name="keywords" content="OS/2, OS/2 Warp, os2museum, виртуализация, виртуальная машина, виртуальные машины, даунгрейд, старое железо, старое компьютерное железо">
+    
+    	<meta property="fb:app_id" content="444736788986613"> 
+<meta property="og:type" content="article"> 
+<meta property="og:url" content="http://habrahabr.ru/post/223277/"> 
+<meta property="og:title" content="Запускаем IBM OS/2 1.0 в виртуальной машине: почему это сложно сделать"> 
+	<meta property="og:image" content="http://habrastorage.org/getpro/habr/post_images/5d0/fee/5fa/5d0fee5fa6f2c29e17ece9a05fbc6ac7.png">
+	<link rel="image_src" href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/5d0fee5fa6f2c29e17ece9a05fbc6ac7.png"><meta property="og:image" content="http://habrastorage.org/getpro/habr/post_images/85e/6e9/2ae/85e6e92ae1ddb3b8415f643fee0b6907.png">
+	<link rel="image_src" href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/85e6e92ae1ddb3b8415f643fee0b6907.png"><meta property="og:image" content="http://habrastorage.org/getpro/habr/post_images/e21/22f/165/e2122f1653e60fb07bb277d717732ee7.png">
+	<link rel="image_src" href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/e2122f1653e60fb07bb277d717732ee7.png"><meta property="og:image" content="http://habrastorage.org/getpro/habr/post_images/d26/5df/a3e/d265dfa3e9052727c8922c1f6c5c641e.png">
+	<link rel="image_src" href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/d265dfa3e9052727c8922c1f6c5c641e.png"><meta property="og:image" content="http://habrastorage.org/getpro/habr/post_images/9a7/63b/1fa/9a763b1fa3657ffe5e41a811c56732ed.png">
+	<link rel="image_src" href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/9a763b1fa3657ffe5e41a811c56732ed.png">
+	
+<meta property="og:description" content="Почему OS/2 сложно запустить в виртуальной среде? Из-за определённых причин OS/2 очень сложно заставить работать в виртуальной машине; гораздо сложнее, чем DOS,...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@habrahabr">
+
+
+      <link href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all.css" rel="stylesheet" media="all">
+  
+    <link href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/navbar.css" rel="stylesheet" media="all">
+
+      <link href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/posts.css" rel="stylesheet" media="all">
+  <link href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/comments.css" rel="stylesheet" media="all">
+  <link href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/forms.css" rel="stylesheet" media="all">
+  <link href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/highlight.css" rel="stylesheet" media="all">
+
+
+    <link href="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/printer.css" rel="stylesheet" media="print">
+
+    
+    
+
+      <script src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/watch.js" async="" type="text/javascript"></script><script src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/analytics.js" async=""></script><script src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all.js"></script>
+    <script src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/_navbar.js"></script>
+
+
+      <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery.js"></script>
+  <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery_002.js"></script>
+  <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/wysiwyg.js"></script>
+  <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/highlight.js"></script>
+  <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery-ui-highlight.js"></script>
+  <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/posts.js"></script>
+  <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/comments.js"></script>
+  <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all_002.js"></script>
+
+
+      <!-- www.criteo.com/ru -->
+<script type="text/javascript">
+  var crtg_nid="2580";
+  var crtg_cookiename="cto_rtt";
+  var crtg_varname="crtg_content";
+  function crtg_getCookie(c_name){
+    var i,x,y,ARRCookies=document.cookie.split(";");
+    for(i=0;i<ARRCookies.length;i++){
+      x=ARRCookies[i].substr(0,ARRCookies[i].indexOf("="));
+      y=ARRCookies[i].substr(ARRCookies[i].indexOf("=")+1);
+      x=x.replace(/^\s+|\s+$/g,"");
+      if(x==c_name){return unescape(y);}
+    }
+    return'';
+  }
+  var crtg_content = crtg_getCookie(crtg_cookiename);var crtg_rnd=Math.floor(Math.random()*99999999999);
+  var crtg_url=location.protocol+'//rtax.criteo.com/delivery/rta/rta.js?netId='+escape(crtg_nid);crtg_url+='&cookieName='+escape(crtg_cookiename);crtg_url+='&rnd='+crtg_rnd;crtg_url+='&varName=' + escape(crtg_varname);
+  var crtg_script=document.createElement('script');crtg_script.type='text/javascript';crtg_script.src=crtg_url;crtg_script.async=true;
+  if(document.getElementsByTagName("head").length>0)document.getElementsByTagName("head")[0].appendChild(crtg_script);
+  else
+  if(document.getElementsByTagName("body").length>0)document.getElementsByTagName("body")[0].appendChild(crtg_script);
+</script><script async="" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/rta.js" type="text/javascript"></script>
+      <script>
+        var N = 5;
+        var ar_duo1 = Math.floor(Math.random()*N+1);
+      </script>
+      <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/adriver.js"></script>
+
+    <link title="Хабрахабр / Комментарии к публикации «Запускаем IBM OS/2 1.0 в виртуальной машине: почему это сложно сделать»" type="application/rss+xml" rel="alternate" href="http://habrahabr.ru/rss/post/223277/">
+        
+    
+    
+<script type="text/javascript">
+
+    var user_type = "guest";
+    var username = 'guest';
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-726094-1',  'auto' ); 
+
+  ga('require', 'displayfeatures');
+  ga('set', 'dimension1', user_type); // user type - guest/readonly/habrauser
+  ga('set', 'dimension2', username); // username
+
+
+  ga('send', 'pageview');
+  
+</script>
+
+
+
+<script type="text/javascript">
+var pp_gemius_identifier = new String('p8zr4.NqiIZJgD2cnP2s5fWWnIQFHrAvZ280B955gIr.f7');
+</script>
+<script src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/gemius.js"></script>
+
+
+
+
+
+
+
+    
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter24049213 = new Ya.Metrika({id:24049213,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/24049213" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+  </head>
+
+  <body>
+    
+    <div id="layout">
+      <div id="navbar_overlay" class="hidden"></div>
+<div id="navbar">
+  <div class="nav_panel">
+    <a href="http://habrahabr.ru/" class="logo"></a>
+      <a href="http://habrahabr.ru/posts/" class="tab tab_menu" data-tab="menu_tab" title="Меню"></a>
+      <a href="https://habrahabr.ru/auth/login/" class="tab tab_login" id="login" title="Войти"></a>
+    
+    <a href="#" class="scroll_to_up hidden scroll_to_up_for_guest" id="scroll_to_top" title="Наверх"></a>
+  </div>
+  <div class="nav_tabs_content ">
+    
+    <div class="nav_tab " id="menu_tab">
+      <div class="title">Разделы</div>
+      <form action="/search/" method="get" class="global_search_form">
+        <div>
+          <input name="q" placeholder="Поиск" type="text">
+        </div>
+      </form>
+      <div class="menu">
+        <a href="http://habrahabr.ru/posts/top/">Посты</a>
+        <a href="http://habrahabr.ru/hubs/">Хабы</a>
+        <a href="http://habrahabr.ru/companies/">Компании</a>
+        <a href="http://habrahabr.ru/users/">Пользователи</a>
+        <a href="http://toster.ru/" class="new_window">Q&amp;A</a>
+        <a href="http://habrahabr.ru/sandbox/">Песочница</a>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+      <div class="inner">
+        
+                
+        
+
+        	
+  <div class="content_left">
+  	
+
+
+
+
+
+    <div class="post_show">
+  	  
+  <div class="post translation shortcuts_item" id="post_223277">
+  	<div class="published">вчера в 16:31</div>  
+    <h1 class="title">
+	      
+      
+
+
+        <span class="post_title">Запускаем IBM OS/2 1.0 в виртуальной машине: почему это сложно сделать</span>
+
+			<span class="flag flag_translation">перевод</span>
+			
+			
+			
+			<a href="http://habrahabr.ru/info/help/karma/#recovery" class="flag flag_recovery" title="Реабилитационный пост от пользователя с отрицательной кармой">recovery mode</a>
+
+  	</h1>
+  	
+  	<div class="hubs">
+		<a href="http://habrahabr.ru/hub/antikvariat/" class="hub " title="Вы не подписаны на этот хаб">Старое железо</a>, 
+		<a href="http://habrahabr.ru/hub/virtualization/" class="hub " title="Вы не подписаны на этот хаб">Виртуализация</a><span class="profiled_hub" title="Профильный хаб">*</span>, 
+		<a href="http://habrahabr.ru/hub/os/" class="hub " title="Вы не подписаны на этот хаб">Операционные системы</a><span class="profiled_hub" title="Профильный хаб">*</span>
+</div>
+
+  	
+    <div class="content html_format">
+      <h2>Почему OS/2 сложно запустить в виртуальной среде?</h2><br>
+Из-за определённых причин OS/2 очень сложно заставить работать в 
+виртуальной машине; гораздо сложнее, чем DOS, Windows 3.x, Windows NT, 
+Windows 95 или множество UNIX-подобных операционных систем. Проблемы 
+кроются в архитектуре Полуоси и её истории.<br>
+<br>
+<i>Сначала разговор пойдёт об особенностях реализации ядра и драйверов старых (</i>очень<i>
+ старых) версий OS/2, затем немного про виртуалки, а после этого автор, 
+выполнив ряд манипуляций, запустит IBM OS/2 1.0 в виртуальной машине 
+VirtualBox 4.3.8 на своём Маке — КДПВ. — прим. пер.</i><br>
+<br>
+<img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/5d0fee5fa6f2c29e17ece9a05fbc6ac7.png" title="Хотел же декорацию Макоси отрезать... -- прим. пер." alt="IBM Operating System/2 Installation. Version 1.00"><br>
+<br>
+<a name="habracut"></a><br>
+Ну, во-первых, старые версии OS/2 (имея в виду Warp 3 и ниже) сложно 
+запустить даже на железном Pentium III и подобных, казалось бы, древних 
+машинах. В коде операционной системы содержится множество разных циклов,
+ используемых для установки временных задержек (<em>ориг. timing loops — прим. пер.</em>),
+ которые сбоят на быстрых прооцессорах, вызывая ошибки переполнения при 
+делении и всякие другие. Такому подвержены почти все 1.x версии. 
+Поддержка больших IDE дисков тоже с проблемами, но уж в <em>этом</em> 
+точно не следует винить OS/2; в то время стандарт IDE бурно развивался, и
+ мы говорим о тех временах, когда дисков больше, ну, 300 мегабайт и не 
+существовало вовсе, и в этом плане виртуализация даже помогает — куда 
+легче сдвинуть бегунок в настройках виртуальной машины влево и создать 
+виртуальный накопитель на, пусть, 120 мегабайт, чем бегать и искать 
+настоящий, рабочий жёсткий диск настолько маленьких объёмов.<br>
+<br>
+Потом, существует ряд проблем, специфичных исключительно для виртуальных
+ сред. Давайте начнём со старейших версий Оси. IBM OS/2 1.0 и 1.1 
+используют 286-style переключение между защищённым и реальным режимом 
+центрального процессора. Это такой способ, который использует код BIOS 
+для того, чтобы возобновить работу машины в другом режиме на 
+определённом этапе, ведь для переключения между режимами используется <em>аппаратный</em>
+ сброс процессора; большинством виртуальных машин подобная экзекуция не 
+нравится, и воспринимается как фатальная ошибка. Интересно, что редакция
+ OS/2 1.x от Microsoft всё-таки детектирует 386-й процессор, и если 
+такой был найден, то используется другой, гораздо более эффективный 
+способ переключения между режимами через изменение регистра CR0.<br>
+<br>
+Ещё в версиях 1.x использовался весьма необычный драйвер дисковода, 
+который определяет тип накопителя, то есть его размер, основываясь на 
+скорости передачи данных контроллером. 3.5-дюймовые диски объёмом 720 
+килобайт читаются на скорости 250 K/s, а объёмом 1.44 мегабайта — на 
+скорости 500 K/s. Но это железным флопаком. А виртуальные машины не 
+заморачиваются эмуляцией настолько тонких деталий и позволяют гостевой 
+операционной системе, в нашей случае — Оси, в отличие от настоящего 
+дисковода, читать 1.44-меговую дискету, даже если контроллер дисковода 
+запрограммирован на скорость 250 K/s. В результате, драйвер думает, что в
+ дисковод вставлен 720-килобайтный диск, что приводит к забавным 
+ошибкам, и в общем — к невозможности загрузиться с дискеты.<br>
+<br>
+С веткой 2.x всё немного по-другому: драйвер дисковода уже не настолько 
+хитрый и работает нормально, переключение между режимами центрального 
+процессора использует специфичный для 386-го процессора код (<em>в 2.x была дропнута поддержка 80286 — прим. пер.</em>),
+ но ситуация-то в общем не лучше. OS/2 2.x всё ещё испытывает проблемы с
+ таймингом, и на быстрых процессорах может зависнуть в любой момент, 
+особенно на ранней стадии загрузки. А из-за того, как в Полуоси 
+смешивается 16-битный реальный и 32-битный код защищённого режима, 
+чрезвычайно важно правильно реализовывать все аспекты работы процессоров
+ архитектуры x86, и с этим у виртуальных машин проблемы. Довольно часто 
+встречаются плавающие, сложноуловимые баги, из-за которых OS/2 (<em>имеются в виду </em>в основном<em> версии до Warp 4 — прим. пер.</em>) не может загрузиться и работать в виртуальной машине без ошибок.<br>
+<br>
+Другая проблема — старый (DOS-совместимый) стиль обработки ошибок FPU (<em>Floating Point Unit — математический сопроцессор для операций с плавающей точкой — прим. пер.</em>). OS/2 non-SMP версий (<em>a.
+ k. a. UNI — системы, не использующие симметричную мультипроцессорность —
+ Symmetric MultiProcessor system; термин применяется как к software, так
+ и к hardware — прим. пер.</em>) используют 8086-совместимый метод генерации сигнала <code>FERR#</code>
+ и конвертирования его в IRQ 19, вместо использования #MF-исключений, 
+как делают все современные операционные системы в наши дни. Такой 
+механизм должен быть корректно эмулирован для работы Оси в виртуальной 
+машине.<br>
+<br>
+Только самые последние версии Оси (так называемые Convenience Pack'и — 
+MCP1, MCP2 для клиента и ACP1, ACP2 — для сервера) поддерживаются в 
+качестве гостя в некоторых виртуальных машинах (известно, что в Virtual 
+PC и VirtualBox). К тому времени IBM (<em>МДМ — МежДелМаш — Международные Деловые Машины ;) — прим. пер.</em>)
+ уже разгребли проблемы с зависимостью от скорости процессора в 
+некоторых местах, и поддержка аппаратного обеспечения уже вышла на 
+уровень, подходящий для работы с сегодняшними виртуальными устройствами,
+ эмулируемыми виртуальными машинами.<br>
+<br>
+Полуось работает особенно хорошо, если включить (<em>включайте всегда — прим. пер.</em>)
+ аппаратное ускорение (VT-x и AMD-V) — MCP и ACP устанавливаются и 
+работают без каких либо проблем, и к тому же и Virtual PC, и VirtualBox к
+ этому времени выпустили <em>дополнения гостевой ОС</em>, добавляющие 
+свои аппаратно ускоренные видеодрайверы, поддержку интеграции мыши, 
+общие папки, и подобные вещи, сильно улучшающие юзабельность Оси в 
+виртуалке. <br>
+<br>
+Всё, как и всегда — вопрос денег и усилий, потраченных на решение 
+проблемы. Почти всё, что угодно может быть решено, если в этом есть 
+реальная потребность.<br>
+<br>
+<h2>Запускаем IBM OS/2 1.0 в виртуальной машине</h2><br>
+Как я уже говорил, соврешенно непонятно, почему ядра ревизии IBM даже 
+при наличии 80386-совместимого центрального процессора, используют 
+старый, 286-style способ переключения режимов, при котором происходит 
+аппаратный сброс ЦПУ, а затем выполнение продолжается из BIOS, которому 
+было перед этим сказано, с какого места выполнение необходимо 
+продолжить. Майкрософтовский релиз OS/2 1.0 содержал ядро, использующее,
+ когда возможно, новый (более быстрый) 386-only код переключения режимов
+ аж с самой первой версии OS/2 SDK beta — апрель 1987 года.<br>
+<br>
+А чтобы стало вообще интересно, ядро OS/2 также знаменито из-за использования <em>недокументированной инструкции <code>LOADALL</code></em>, если оно запущенно на 80286. И всё равно IBM-версия OS/2 1.0 запускалась на 386 AT-клонах того времени! Как это возможно?<br>
+<br>
+Ключевое слово — BIOS. BIOS машин на процессоре 80386 <em>обязан</em> 
+поддерживать 286-style переключение режимов, и это стандартная 
+функциональность. И код перключения режимов, написанный для 286 также 
+работает и на системах с 80386.<br>
+<br>
+Как на 80386 работает <code>LOADALL</code> же — менее очевидно. 
+Разработчики BIOS вскоре осознали, что на 386-совместимых процессорах 
+можно сравнительно просто эмулировать подмножество <code>LOADALL</code>,
+ переключившись на время в реальный режим. Интелу потребовалось 
+несколько лет, чтобы просто хотя бы догадаться о существовании такой 
+техники в BIOS'ах, и потому подобное поведение едва ли можно назвать 
+хорошо документированным, но оно работает на любой системе с 
+80386-совместимым процессором.<br>
+<br>
+<h3>IBM OS/2 1.0 в VirtualBox 4.3</h3><br>
+VirtualBox версии 4.3 наконец-то научилась запускать древние IBM-версии 
+OS/2 1.0 и 1.1. Далее используется VirtualBox 4.3.8, хост — Mac OS X.<br>
+<br>
+Создайте новую машину, тип гостевой операционки должен быть выставлен в 
+“Other OS/2”. Оперативки поставьте восемь мегабайт (OS/2 1.0 сносит 
+крышу от больших размеров). Виртуальный накопитель поставьте размером 30
+ мегабайт — эта версия OS/2 всё равно не умеет разделы больше 32 
+мегабайт (но OS/2 1.1 уже научили). Можно и больше, но определённо не 
+следует ставить больше 500 мегабайт — возникнут проблемы с несовпадением
+ геометрий.<br>
+<br>
+Но это не всё. Чтобы заработало переключение между режимами центрального
+ процессора, который, как я уже не один раз упомянул, производится через
+ сброс процессора, необходимо твикнуть настройки виртуальной машины, 
+чтобы VirtualBox не завершал её работу с ошибкой при трёхкратном фолте 
+ЦПУ. Обычно, трёхкратная ошибка ЦП означает, что гостевая ОС уже не в 
+состоянии сама разрешить проблему и продолжить работу, но для IBM OS/2 
+1.0/1.1 это — часть нормальной работы. Чтобы изменить настройки 
+виртуальной машины, необходимо перейти в каталог VirtualBox и 
+воспользоваться утилитой VBoxManage:<br>
+<br>
+<pre>VBoxManage modifyvm &lt;имя_виртуальной_машины&gt; --triplefaultreset on</pre><br>
+И ещё нужно пропатчить установочные дискеты.<br>
+Иначе Ось трапнется с ошибкой деления на ноль. <a href="http://www.os2museum.com/files/patchos2.py">Скрипт-патчер на Питоне</a>.<br>
+<br>
+Готово. Пробуйте. Если всё прошло нормально, перед вами вспорхнёт титульный экран установщика:<br>
+<img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/85e6e92ae1ddb3b8415f643fee0b6907.png" title="Эх-х-х-х... -- прим. пер." alt="IBM Operating System/2 Installation. Version 1.00"><br>
+<br>
+Однако, есть вероятность, что у вас возникнет проблема с <em>форматированием</em> раздела в FAT, хотя разбивка должна пройти гладко.<br>
+<img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/e2122f1653e60fb07bb277d717732ee7.png" title=":/ -- прим. пер." alt="FORMAT unsuccessful"><br>
+<br>
+Если не повезло, просто возьмите любую дискету с DOS'ом, загрузите её в 
+виртуалке, и отформатируйте уже созданный раздел в FAT16. Потом снова 
+грузитесь в установщик, и выбирайте использование существующего тома, не
+ форматируйте его заново. Неочевидно, это баг в установщике OS/2 или в 
+VirtualBox.<br>
+<br>
+Затем всё должно идти гладко, и от вас будет требоваться разве что 
+менять виртуальные дискетки в виртуальном дисководе по мере установки, 
+да соглашаться с настройками по умолчанию, которые весьма разумны. После
+ завершения процесса установки OS/2 запустит TSHELL — Text Shell — 
+текстовую оболочку защищённого режима, выполняющую функцию запускалки 
+программ и сессий, и переключалки между OS/2 и DOS сессиями, работающими
+ в многозадачном режиме.<br>
+<img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/d265dfa3e9052727c8922c1f6c5c641e.png" title="Если в \CONFIG.SYS заменить PROTSHELL=C:\OS2\TSHELL.EXE на C:\OS2\CMD.EXE, то оболочка загружена не будет, вы окажетесь в OS/2 Command Prompt и не сможете переключаться между задачами. Догрузить TSHELL можно, вызвав её из командной строки -- прим. пер." alt="TSHELL Program Selector"><br>
+<br>
+И да, это действительно <strong>IBM OS/2 1.0</strong>:<br>
+<img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/9a763b1fa3657ffe5e41a811c56732ed.png" title="OS/2 RULEZ FOREVA! -- прим. пер." alt="IBM Operating System/2 Command Interpreter Version 1.00"><br>
+<br>
+Обратите внимание, что если у вас хост без поддержки аппаратого 
+ускорения виртуализации (технологии VT-x или AMD-V), VirtualBox будет 
+ругаться, что для запуска OS/2 таковая необходима, и откажется запускать
+ виртуальную машину. Аппаратная виртуализация желательна, но OS/2 1.0 
+заработает и без неё (а вот для 2.0, Warp 3 и 4 она обязательна). Обойти
+ ошибки можно поставив тип гостевой операционной системы либо DOS, либо 
+Unknown.<br>
+<br>
+Было бы интересно узнать, какие ещё современные виртуальные машины 
+(нормальные, то есть которые спокойно запускают современные 32-битные и 
+64-битные операционные системы, а не специализированные эмуляторы 80286)
+ способны запускать самые ранние релизы IBM OS/2 — 1.0 и 1.1. Известно, 
+что Microsoft Virtual PC 2007, хоть и рекомендуется для запуска более 
+современных версий OS/2, так как железо эмулируется весьма близко к 
+реальному, не способен запускать IBM OS/2 1.0 и 1.1.<br>
+<br>
+<hr><br>
+<h3>От переводчика:</h3><br>
+Замечания по орфографии, пунктуации и грамматике, о багах перевода и 
+неточностях (я зачастую “плаваю” в тех темах, на которые с лёгкостью 
+говорит Michal Necasek; оттого мне, кстати, и интересно читать и 
+переводить его статьи. Если мне что-то неочевидно (а мне было что-то 
+неочевидно, особенно когда переводил <a href="http://habr.ru/p/210782/">предыдущую статью</a>), я всегда гуглю и пытаюсь разобраться, задаю вопросы) прошу репортить в личку. Пожалуйста.<br>
+<br>
+Сделал опрос о том, хотите ли вы видеть статьи про Ось и смежные темы. 
+Сообществу есть, что сказать, правда. Большей проблемой оказывается то, 
+что соответствующего хаба не предусмотрено, а для подачи заявки постов 
+пока маловато; посмотрим, что можно с этим сделать — есть действительно 
+довольно неплохие статьи.<br>
+<br>
+Ответивших “да” я также прошу прокомментировать статью и указать, какого
+ именно рода статьи вы хотите видеть, что вам интересно узнать.<br>
+<br>
+P. S. Это комбинированный перевод <a href="http://www.os2museum.com/wp/?p=27">двух</a> <a href="http://www.os2museum.com/wp/?p=2314">статей</a>, а столько в поле “источник” не лезет, поэтому указал там просто адрес сайта.
+				<div class="polling">
+		
+
+	<form action="/json/polling/" class="poll" method="post">
+
+		<div class="poll_title">Хотите ли вы видеть больше статей про OS/2, около OS/2 и на смежные с OS/2 темы от сообщества OS/2?</div>
+
+		<input name="post_id" value="223277" type="hidden">
+		<input name="polling_question_id" value="11165" type="hidden">
+
+		<table class="answer">
+			<tbody><tr>
+				<td class="input">
+					<input id="vv56375" class="radio js-field-data" name="variant[]" value="56375" type="radio">
+				</td>
+
+
+				<td class="label">
+					<label for="vv56375">Да (я знаю, что такое OS/2)</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="input">
+					<input id="vv56377" class="radio js-field-data" name="variant[]" value="56377" type="radio">
+				</td>
+
+
+				<td class="label">
+					<label for="vv56377">Да (я не знаю, что такое OS/2)</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="input">
+					<input id="vv56379" class="radio js-field-data" name="variant[]" value="56379" type="radio">
+				</td>
+
+
+				<td class="label">
+					<label for="vv56379">Нет (я не знаю, что такое OS/2)</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="input">
+					<input id="vv56381" class="radio js-field-data" name="variant[]" value="56381" type="radio">
+				</td>
+
+
+				<td class="label">
+					<label for="vv56381">Нет (я знаю, что такое OS/2)</label>
+				</td>
+			</tr>
+		</tbody></table>
+			<p class="for_users_only_msg">Только зарегистрированные пользователи могут участвовать в опросе. <a href="https://habrahabr.ru/auth/login/">Войдите</a>, пожалуйста.</p>
+		<p class="total">Проголосовало 1326 человек. Воздержалось 208 человек.</p>
+	</form>
+
+	</div>
+
+  	<div class="clear"></div>
+    </div>
+    
+    
+<ul class="tags">
+	<li><a href="http://habrahabr.ru/search/?q=%5BOS%2F2%5D&amp;target_type=posts" rel="tag">OS/2</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5BOS%2F2%20Warp%5D&amp;target_type=posts" rel="tag">OS/2 Warp</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5Bos2museum%5D&amp;target_type=posts" rel="tag">os2museum</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%5D&amp;target_type=posts" rel="tag">виртуализация</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B0%5D&amp;target_type=posts" rel="tag">виртуальная машина</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D1%8B%5D&amp;target_type=posts" rel="tag">виртуальные машины</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D0%B4%D0%B0%D1%83%D0%BD%D0%B3%D1%80%D0%B5%D0%B9%D0%B4%5D&amp;target_type=posts" rel="tag">даунгрейд</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D1%81%D1%82%D0%B0%D1%80%D0%BE%D0%B5%20%D0%B6%D0%B5%D0%BB%D0%B5%D0%B7%D0%BE%5D&amp;target_type=posts" rel="tag">старое железо</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D1%81%D1%82%D0%B0%D1%80%D0%BE%D0%B5%20%D0%BA%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80%D0%BD%D0%BE%D0%B5%20%D0%B6%D0%B5%D0%BB%D0%B5%D0%B7%D0%BE%5D&amp;target_type=posts" rel="tag">старое компьютерное железо</a></li>
+</ul>
+
+
+    <div class="infopanel_wrapper">
+	<div class="infopanel " id="infopanel_post_223277">
+	
+				<div class="voting   ">
+	
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+	
+					<div class="mark">
+								<span class="score" title="Результат голосования виден только авторизованным пользователям">—</span>
+					</div>
+					
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+		
+				</div>
+	
+		<div class="pageviews" title="Просмотры поста">25532</div>
+			
+		<div class="favorite">
+				<a class="guest" href="#" onclick="return false;" title="Только зарегистрированные пользователи могут добавлять посты в избранное"></a>
+		</div>
+		<div class="favs_count" title="Количество пользователей, добавивших пост в избранное">56</div>
+		
+		
+			<div class="original-author">
+				<a title="Автор оригинала: Michal Necasek" href="http://os2museum.com/">Michal Necasek</a>
+			</div>
+		
+	
+	
+	
+	
+				<div class="author">
+					<a title="Автор текста" href="http://habrahabr.ru/users/dbanet/">dbanet</a>
+					<span class="rating" title="рейтинг пользователя">75,1</span>
+				</div>
+		
+	
+	
+		
+			<div class="share">
+				<div class="twitter">
+					<a href="http://twitter.com/intent/tweet?text=%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC+IBM+OS%2F2+1.0+%D0%B2+%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9+%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%3A+%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83+%D1%8D%D1%82%D0%BE+%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE+%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C+http://habr.ru/p/223277/+via+%40habrahabr+%23habr" title="Опубликовать ссылку в Twitter" target="_blank"></a>
+				</div>
+				<div class="vkontakte">
+					<a href="http://vk.com/share.php?url=http://habrahabr.ru/post/223277/" title="Опубликовать ссылку во ВКонтакте" onclick="window.open(this.href, 'Опубликовать ссылку во Вконтакте', 'width=800,height=300'); return false"></a>
+				</div>
+				<div class="facebook">
+					<a href="https://www.facebook.com/sharer/sharer.php?u=http://habrahabr.ru/post/223277/" title="Опубликовать ссылку в Facebook" onclick="window.open(this.href, 'Опубликовать ссылку в Facebook', 'width=640,height=436,toolbar=0,status=0'); return false"></a>
+				</div>
+				<div class="googleplus">
+					<a href="https://plus.google.com/share?url=http://habrahabr.ru/post/223277/" title="Опубликовать ссылку в Google Plus" onclick="window.open(this.href, 'Опубликовать ссылку в Google Plus', 'width=800,height=300'); return false"></a>
+				</div>
+			</div>
+	
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+
+
+    
+    
+		
+		
+	</div>
+
+    </div>
+
+  		
+	<div id="adriver_banner_132032996"></div>  
+
+  <script type="text/javascript">  
+	  function show_inner_banner_block(name, url){
+	  	if( typeof(name) !== 'undefined'){
+	  		$.get('/html/'+name+'/1400676126/', function(html){
+	  			$('#adriver_banner_132032996').html(html);
+	  			$('.'+name+'_inner_banner').removeClass('hidden');
+	  			if( typeof(url) !== 'undefined'){
+	  				$('.'+name+'_inner_banner .block_url').attr('href', url);
+	  			}
+	  		})
+	  	}
+	  }
+
+		$(function(){
+			var keyword = '';
+			if (typeof crtg_content !== 'undefined' && crtg_content) { keyword = crtg_content; }
+			var custom = { 4:ar_duo1 };
+				custom[1] = 'antikvariat';
+				custom[2] = 'virtualization';
+				custom[3] = 'os';
+
+            /* Антоша не удаляй это условие блеать! Как я тестить буду? */
+            //if (true)
+            //    show_inner_banner_block('beeline');
+            //else
+			    new adriver("adriver_banner_132032996", {sid: 176776, bt: 52, bn: 3, custom: custom, keyword: keyword});
+		});
+	</script>
+	
+
+
+  	
+  		<div class="comments_list " id="comments">
+
+  <h2 class="title ">Комментарии (<span id="comments_count">31</span>)
+  
+  
+  </h2>
+
+    <div class="comment_item" id="comment_7607709">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7607709">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607709" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/entze/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/ac485f27df43d827a834ea26b893507f_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/entze/" class="username">entze</a><span class="comma">,</span>
+            <time>20 мая 2014 в 17:00</time>
+
+            <a href="#comment_7607709" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Если не ошибаюсь, то SWsoft (который стал Parallels) давным 
+давно занимался проектом виртуализации OS/2 и даже был отдельный 
+продукт. Было необходимо мигрировать на новые системы, сохраняя старые в
+ виртуалках. Дядько Ця писал про это. <br>
+<br>
+Может кто подробнее написать?
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607709">
+        <div class="comment_item" id="comment_7607743">
+
+    <span class="parent_id" data-parent_id="7607709"></span>
+    <div class="comment_body">
+        <div class="info  is_topic_starter  " rel="7607743">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607743" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 2: ↑1 и ↓1">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/dbanet/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/373c2eeed5ba841bc6e54725f5684b9f_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/dbanet/" class="username">dbanet</a><span class="comma">,</span>
+            <time>20 мая 2014 в 17:05<span class="time_changed"> (комментарий был изменён)</span></time>
+
+            <a href="#comment_7607743" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7607743" data-parent_id="7607709" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7607709" data-id="7607743" data-parent_id="7607709" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Вы определённо говорите про SVISTA. ;)<br>
+<a href="http://en.wikipedia.org/wiki/SVISTA">en.wikipedia.org/wiki/SVISTA</a><br>
+<br>
+Ещё вот ссылка: <a href="http://en.wikipedia.org/wiki/TwoOStwo">en.wikipedia.org/wiki/TwoOStwo</a><br>
+<br>
+… чаще не могу отвечать…
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607743">
+        <div class="comment_item" id="comment_7607767">
+
+    <span class="parent_id" data-parent_id="7607743"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7607767">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607767" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 2: ↑1 и ↓1">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/entze/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/ac485f27df43d827a834ea26b893507f_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/entze/" class="username">entze</a><span class="comma">,</span>
+            <time>20 мая 2014 в 17:09</time>
+
+            <a href="#comment_7607767" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7607767" data-parent_id="7607743" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7607743" data-id="7607767" data-parent_id="7607743" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Не, <a href="http://en.wikipedia.org/wiki/TwoOStwo">en.wikipedia.org/wiki/TwoOStwo</a> :)
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607767">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7607785">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7607785">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607785" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 11: ↑10 и ↓1">+9</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/Cobolorum/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+            <a href="http://habrahabr.ru/users/Cobolorum/" class="username">Cobolorum</a><span class="comma">,</span>
+            <time>20 мая 2014 в 17:16</time>
+
+            <a href="#comment_7607785" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Куда мы катимся… 23% — «я не знаю, что такое OS/2»<br>
+
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607785">
+        <div class="comment_item" id="comment_7607807">
+
+    <span class="parent_id" data-parent_id="7607785"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7607807">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607807" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/entze/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/ac485f27df43d827a834ea26b893507f_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/entze/" class="username">entze</a><span class="comma">,</span>
+            <time>20 мая 2014 в 17:24</time>
+
+            <a href="#comment_7607807" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7607807" data-parent_id="7607785" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7607785" data-id="7607807" data-parent_id="7607785" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Интересно, какова доля OS/2 в банкоматах? Раньше распространена была. В банках тоже может крутиться.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607807">
+        <div class="comment_item" id="comment_7607909">
+
+    <span class="parent_id" data-parent_id="7607807"></span>
+    <div class="comment_body">
+        <div class="info  is_topic_starter  " rel="7607909">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607909" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/dbanet/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/373c2eeed5ba841bc6e54725f5684b9f_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/dbanet/" class="username">dbanet</a><span class="comma">,</span>
+            <time>20 мая 2014 в 17:51</time>
+
+            <a href="#comment_7607909" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7607909" data-parent_id="7607807" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7607807" data-id="7607909" data-parent_id="7607807" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            На хабре была серия статей про банкоматы. Там можно поискать по словам «OS/2» и «полуось». Вкратце — исчезающе мало.<br>
+<a href="http://habrahabr.ru/post/216315/#comment_7415025">habrahabr.ru/post/216315/#comment_7415025</a>
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607909">
+        <div class="comment_item" id="comment_7608019">
+
+    <span class="parent_id" data-parent_id="7607909"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608019">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608019" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 2: ↑2 и ↓0">+2</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/vvzvlad/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/f03e2ac966b26334997c3be1257a4baf_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/vvzvlad/" class="username">vvzvlad</a><span class="comma">,</span>
+            <time>20 мая 2014 в 18:28</time>
+
+            <a href="#comment_7608019" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608019" data-parent_id="7607909" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7607909" data-id="7608019" data-parent_id="7607909" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Ну не исчезающе. Постоянно в москве вижу<br>
+<img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/b72325f0dc5ed87b7ba71dfa9341675c.jpg" alt="image">
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608019">
+        <div class="comment_item" id="comment_7608905">
+
+    <span class="parent_id" data-parent_id="7608019"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608905">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608905" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/ipswitch/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/134ad601a0ea00ca6c912ae0cce8287e_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/ipswitch/" class="username">ipswitch</a><span class="comma">,</span>
+            <time>21 мая 2014 в 00:08</time>
+
+            <a href="#comment_7608905" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608905" data-parent_id="7608019" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608019" data-id="7608905" data-parent_id="7608019" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            К слову, скоро исчезнут вот эти конкретные. Купивший 
+МосКомПрБ БИНБАНК уже закрыл несколько отделений на ребрендинг под своим
+ брендом, с заменой банкоматов.<br>
+А вот у Банка Москвы до сих пор встречаются.<br>
+Ещё были такие у закрытого Смоленского Банка, 100% банкоматов…
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608905">
+        <div class="comment_item" id="comment_7609623">
+
+    <span class="parent_id" data-parent_id="7608905"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7609623">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7609623" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/bazil11/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/2394374a530bbaacdcb31733286a2750_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/bazil11/" class="username">bazil11</a><span class="comma">,</span>
+            <time>21 мая 2014 в 09:59</time>
+
+            <a href="#comment_7609623" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7609623" data-parent_id="7608905" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608905" data-id="7609623" data-parent_id="7608905" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Так же видел подобное в банкоматах у б. Балтика (конкретно — дефолт сити, марьино)
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7609623">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+        <div class="comment_item" id="comment_7608253">
+
+    <span class="parent_id" data-parent_id="7607909"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608253">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608253" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/Alexsey/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/de91184045b541420885547220096db6_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/Alexsey/" class="username">Alexsey</a><span class="comma">,</span>
+            <time>20 мая 2014 в 19:51<span class="time_changed"> (комментарий был изменён)</span></time>
+
+            <a href="#comment_7608253" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608253" data-parent_id="7607909" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7607909" data-id="7608253" data-parent_id="7607909" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Не сказал бы что мало, у меня на работе 2 банкомата стоят — 
+один на OS/2, другой на WinXP. И насколько я знаю у моего зарплатного 
+банка достаточно много банкоматов на OS/2 работают.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608253">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+        <div class="comment_item" id="comment_7608449">
+
+    <span class="parent_id" data-parent_id="7607785"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608449">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608449" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 2: ↑2 и ↓0">+2</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/lany/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+            <a href="http://habrahabr.ru/users/lany/" class="username">lany</a><span class="comma">,</span>
+            <time>20 мая 2014 в 20:55</time>
+
+            <a href="#comment_7608449" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608449" data-parent_id="7607785" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7607785" data-id="7608449" data-parent_id="7607785" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Я ответил, что «не знаю», хотя в теории знаю. Вот на 
+практике пользоваться никогда не приходилось. Может, и остальные 
+проявили скромность :-)<br>
+<br>
+Мне интересна не столько OS/2, сколько вот эти штуки типа определения 
+скорости дисковода или переключения в защищённый режим. В смысле, как 
+вообще работали системы в те лохматые годы. В этом плане автор пиши ещё 
+:-)
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608449">
+        <div class="comment_item" id="comment_7608671">
+
+    <span class="parent_id" data-parent_id="7608449"></span>
+    <div class="comment_body">
+        <div class="info  is_topic_starter  " rel="7608671">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608671" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/dbanet/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/373c2eeed5ba841bc6e54725f5684b9f_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/dbanet/" class="username">dbanet</a><span class="comma">,</span>
+            <time>20 мая 2014 в 22:16</time>
+
+            <a href="#comment_7608671" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608671" data-parent_id="7608449" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608449" data-id="7608671" data-parent_id="7608449" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Я учёл, спасибо.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608671">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7607919">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7607919">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607919" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 5: ↑5 и ↓0">+5</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/Diden05/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/54301754967dbb9d99f130604384dae1_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/Diden05/" class="username">Diden05</a><span class="comma">,</span>
+            <time>20 мая 2014 в 17:57</time>
+
+            <a href="#comment_7607919" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Помню у нас весь пенсионный фонд на OS/2 работал. <br>
+У меня фидошная нода на полуоси крутилась, эх времена.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607919">
+        <div class="comment_item" id="comment_7608769">
+
+    <span class="parent_id" data-parent_id="7607919"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608769">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608769" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 2: ↑2 и ↓0">+2</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/aram_pakhchanian/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+            <a href="http://habrahabr.ru/users/aram_pakhchanian/" class="username">aram_pakhchanian</a><span class="comma">,</span>
+            <time>20 мая 2014 в 23:02</time>
+
+            <a href="#comment_7608769" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608769" data-parent_id="7607919" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7607919" data-id="7608769" data-parent_id="7607919" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Пенсионный фонд в свое время вообще подсел на все от IBM. На
+ рабочих машинах была OS/2, на серверах AS/400 крутились DB/2, в которых
+ все мы и числились.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608769">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7608029">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608029">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608029" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 4: ↑3 и ↓1">+2</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/emostar/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/7ff614096adf6f2267a04a3f76f2b155_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/emostar/" class="username">emostar</a><span class="comma">,</span>
+            <time>20 мая 2014 в 18:30</time>
+
+            <a href="#comment_7608029" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Да, пожалуйста, продолжайте писать об OS/2, всегда было 
+интересно, как-то мимо меня прошла она в своё время, даже скачать негде 
+было (да и сейчас не знаю где)
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608029">
+        <div class="comment_item" id="comment_7608047">
+
+    <span class="parent_id" data-parent_id="7608029"></span>
+    <div class="comment_body">
+        <div class="info  is_topic_starter  " rel="7608047">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608047" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 3: ↑3 и ↓0">+3</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/dbanet/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/373c2eeed5ba841bc6e54725f5684b9f_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/dbanet/" class="username">dbanet</a><span class="comma">,</span>
+            <time>20 мая 2014 в 18:35<span class="time_changed"> (комментарий был изменён)</span></time>
+
+            <a href="#comment_7608047" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608047" data-parent_id="7608029" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608029" data-id="7608047" data-parent_id="7608029" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Обязательно!<br>
+<br>
+«Скачать» её нельзя потому, что она ещё продаётся под другим именем — eComStation.<br>
+<br>
+Но если очень хочется, то можно — прошу в личку…
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608047">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7608103">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608103">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608103" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 1: ↑1 и ↓0">+1</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/citius/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/12ce1fbde464d8425e2c784b600f3480_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/citius/" class="username">citius</a><span class="comma">,</span>
+            <time>20 мая 2014 в 18:59</time>
+
+            <a href="#comment_7608103" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Пополама была великолепна. На Мерлине и Авроре удалось в 
+свое время довольно долго просидеть и на домашнем компе и на работе.<br>
+Очень жаль, что она фактически перестала развиваться и померла.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608103">
+        <div class="comment_item" id="comment_7608153">
+
+    <span class="parent_id" data-parent_id="7608103"></span>
+    <div class="comment_body">
+        <div class="info  is_topic_starter  " rel="7608153">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608153" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/dbanet/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/373c2eeed5ba841bc6e54725f5684b9f_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/dbanet/" class="username">dbanet</a><span class="comma">,</span>
+            <time>20 мая 2014 в 19:16<span class="time_changed"> (комментарий был изменён)</span></time>
+
+            <a href="#comment_7608153" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608153" data-parent_id="7608103" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608103" data-id="7608153" data-parent_id="7608103" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            &gt;Очень жаль, что она фактически перестала развиваться и померла.<br>
+<br>
+Ога, померла, и не один раз.<br>
+<br>
+Другое дело, что на развитие попросту не хватает человекоденежных 
+ресурсов. На поддержание в хоть каком-нибудь более-менее актуальном 
+состоянии — и то едва ли. Все скудные силы бросаются на очевидные вещи —
+ запуск на современных машинах с ACPI, AHCI и сносная работа с видео 
+через биос. UEFI пока никак. Драйвер звука тоже один — ограниченный 
+старый порт альсы. С новыми сетевыми карточками тоже всё хреново. С 
+вайфаем полный атас.<br>
+<br>
+Потом, надо понимать, что необходимо портировать современное мастхев-ПО 
+для любого десктопа: браузер и офисный пакет. Что уже чрезвычайно 
+сложно. А с другого конца ломают в новых версиях уже сделанное просто 
+потому, что всем пофиг, хотя можно было бы и не трогать.<br>
+<br>
+Короче, на качественное развитие ресурсов почти не остаётся…
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608153">
+        <div class="comment_item" id="comment_7608225">
+
+    <span class="parent_id" data-parent_id="7608153"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608225">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608225" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/ereinion/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/5842a62aa41862b07219e585c144484f_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/ereinion/" class="username">ereinion</a><span class="comma">,</span>
+            <time>20 мая 2014 в 19:44</time>
+
+            <a href="#comment_7608225" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608225" data-parent_id="7608153" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608153" data-id="7608225" data-parent_id="7608153" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Вайфай под eComStation (i3945) у меня запустился вполне прилично. И даже вроде USB теперь нормально работает.<br>
+Разгребаю проблемы работы SMP+ACPI на ThinkPad T60 — с включенным SMP работает нестабильно.<br>
+Огорчает отсутствие поддержки Bluetooth и биометрических датчиков…<br>
+Да и скоро вплотную встанет проблема с поддержкой объема ОЗУ больше 3 
+гигов ((( А на х64 ядро никто не переделает уже, а проекты OS/Free и 
+OS/4 слишком медленно развиваются (OS/Free как я понял заглох вообще).
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608225">
+        <div class="comment_item" id="comment_7608271">
+
+    <span class="parent_id" data-parent_id="7608225"></span>
+    <div class="comment_body">
+        <div class="info  is_topic_starter  " rel="7608271">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608271" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 3: ↑3 и ↓0">+3</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/dbanet/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/373c2eeed5ba841bc6e54725f5684b9f_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/dbanet/" class="username">dbanet</a><span class="comma">,</span>
+            <time>20 мая 2014 в 19:55<span class="time_changed"> (комментарий был изменён)</span></time>
+
+            <a href="#comment_7608271" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608271" data-parent_id="7608225" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608225" data-id="7608271" data-parent_id="7608225" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Значит, дела обстоят примерно так.<br>
+<br>
+USB стек умеет только 2.0 — не выше. Работает, как бы, хорошо, никаких проблем нет.<br>
+<br>
+&gt;Разгребаю проблемы работы SMP+ACPI на ThinkPad T60 — с включенным SMP работает нестабильно.<br>
+<br>
+Хм. Скажите пожалуйста, какая версия eCS у вас установлена, назовите версию ядра и подсистемы ACPI.<br>
+На T60 проблем быть не должно.<br>
+<br>
+&gt;Да и скоро вплотную встанет проблема с поддержкой объема ОЗУ больше 3
+ гигов ((( А на х64 ядро никто не переделает уже, а проекты OS/Free и 
+OS/4 слишком медленно развиваются (OS/Free как я понял заглох вообще).<br>
+<br>
+Тут всё интереснее.<br>
+<br>
+Вообще, изначально существовал проект OS/3. Эти люди работали над ядром 
+из утекших исходников Мерлина (несобираемыми). Сейчас данный проект уже 
+не существует.<br>
+<br>
+Как я уже говорил, людей очень мало, но работают два попендикулярных 
+проекта, состоящих исключительно из энтузиастов: osFree и OS/4.<br>
+Кстати, оба были названы по подобию OS/3 (ow-ess-three, что созвучно с OS free).<br>
+<br>
+osFree — проект по переносу всего и вся на микроядро L4/Fiasco. 
+Большущая статья от мейнтейнера данного проекта (русский!) не прошла из 
+песочницы, и инвайт этому человеку не достался. Объём работ огромен, и 
+на данный момент невыполним, но работа реально ведётся. Есть 
+загружающийся образ, который сохраняет весьма-весьма-весьма ограниченную
+ совместимость с программами OS/2 на уровне исходного кода (то есть, 
+требуется рекомпиляция). Естественно, в идеалистичных планах 
+присутствует написание персоналити лейера для запуска приложений OS/2 
+без рекомпиляций (application binary interface compatibility).<br>
+Следует понимать, что объём работ невероятно огромен.<br>
+<br>
+OS/4 специализируется *исключительно* на ядре, и утекшие исходники не используются в проекте.<br>
+Основная задача — запуск OS/2 на тех машинах, на которых запуск OS/2 с оригинальным ядром невозможен.<br>
+Ядро собирается свободным компилятором OpenWatcom, и оно в общем гораздо прямее бимерского.<br>
+<br>
+На базе последнего как раз только и возможны настолько большие перемены, как внесение поддержки &gt; 4 GiB.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608271">
+    </div>
+</div>
+
+        <div class="comment_item" id="comment_7608301">
+
+    <span class="parent_id" data-parent_id="7608225"></span>
+    <div class="comment_body">
+        <div class="info  is_topic_starter  " rel="7608301">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608301" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 3: ↑3 и ↓0">+3</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/dbanet/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/373c2eeed5ba841bc6e54725f5684b9f_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/dbanet/" class="username">dbanet</a><span class="comma">,</span>
+            <time>20 мая 2014 в 20:11</time>
+
+            <a href="#comment_7608301" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608301" data-parent_id="7608225" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608225" data-id="7608301" data-parent_id="7608225" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Вообще, как вы понимаете, решений данной проблемы несколько.<br>
+<br>
+Первая — запускаться в режиме x86_64. Вкратце — невыполнимо.<br>
+Огромный объём работ, переписывание всех без исключения драйверов 
+(неполностью, конечно), придётся переделывать некоторые части 
+операционной системы полностью — те, которые используют 
+шестнадцатибитный код. Останемся без MVDM. Необходимо будет как-нибудь 
+придумывать, как запускать приложения, имеющие части, написанные в 
+шестнадцати битах. Драйверы, опять же. Короче, от оси, какой все её 
+знают, мало что останется, кроме того, что это невыполнимый объём работ.<br>
+<br>
+Вторая — впилить в memory manager ядра OS/4 поддержку расширения PAE. Вкратце — большие проблемы, теоретически выполнимо.<br>
+Потребует огромного количества работы, а потом ещё и придётся 
+переписывать драйверы, что усложняется тем, что исходники многих 
+драйверов недоступны. Но ось может выжить, однако ненадолго — снова 
+скоро оп-па, и 64 гигабайт снова будет не хватать.<br>
+<br>
+Третяя, костыльная.<br>
+Штука в том, что то, что называют ограничением в четыре гигабайта — это 
+ограничение **виртуальной памяти процесса**. А процессов может быть 
+дофига и больше, и каждый, в идеале, может занять до четырёх гигабайт. С
+ этим можно жить.<br>
+<br>
+Вопрос, куда мапить эту память. Очевидно, как и любую виртуальную 
+память, в физику, потому что ничего быстрее в компе пока нет. Но **и 
+физика тоже** ограничивается четырьмя гигабайтами.<br>
+<br>
+Тут начинается костыль. Один добрый человек написал хитрый и очень 
+быстрый RAM-диск, который работает параллельно memory manager'у ядра, и 
+может использовать физическую память выше четырёх гигабайт. Как только 
+необходимо сделать что-нибудь с такой памятью, он переходит в режим PAE,
+ работает с памятью, а под конец возвращает всё обратно. Чистая магия.<br>
+<br>
+Осталось только положить файл подкачки на такой RAM-диск (что без 
+проблем), если бы не одно но — ядро написано так, что в сумме физическая
+ память + подкачанная память не может быть больше четырёх гигабайт… 
+приехали…<br>
+<br>
+Это снова огромный объём работ по переписыванию кучи всего в ядре, но плюс тут в том, что не нужно будет переписывать драйвера.<br>
+<br>
+Как-то так.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608301">
+        <div class="comment_item" id="comment_7608315">
+
+    <span class="parent_id" data-parent_id="7608301"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608315">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608315" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 1: ↑1 и ↓0">+1</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/ereinion/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/5842a62aa41862b07219e585c144484f_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/ereinion/" class="username">ereinion</a><span class="comma">,</span>
+            <time>20 мая 2014 в 20:19</time>
+
+            <a href="#comment_7608315" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608315" data-parent_id="7608301" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608301" data-id="7608315" data-parent_id="7608301" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Ситуация знакома мне…<br>
+И как мне кажется, именно стремящаяся к нулю вероятность пережить 
+переход на 64 бит и хоронит систему — с одной стороны никто не хочет 
+писать/портировать ПО под систему, которая уже 10 раз умерла и может в 
+любой момент умереть окончательно, а с другой — раз нет ПО, то смысл 
+пытаться развивать систему. Остаются одни энтузиасты, которые тоже часто
+ не могут прийти к общему мнению и вечно обижаются друг на друга.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608315">
+        <div class="comment_item" id="comment_7608343">
+
+    <span class="parent_id" data-parent_id="7608315"></span>
+    <div class="comment_body">
+        <div class="info  is_topic_starter  " rel="7608343">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608343" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/dbanet/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/373c2eeed5ba841bc6e54725f5684b9f_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/dbanet/" class="username">dbanet</a><span class="comma">,</span>
+            <time>20 мая 2014 в 20:23</time>
+
+            <a href="#comment_7608343" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608343" data-parent_id="7608315" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608315" data-id="7608343" data-parent_id="7608315" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Вы понимаете, по сути никакой особой надобности в запуске в режиме x86_64 не наблюдается.<br>
+<br>
+А вот своп бесконечный сделать… ну, как бы, круто было бы, да.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608343">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7608209">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608209">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608209" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/ereinion/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/5842a62aa41862b07219e585c144484f_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/ereinion/" class="username">ereinion</a><span class="comma">,</span>
+            <time>20 мая 2014 в 19:39</time>
+
+            <a href="#comment_7608209" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Напишите, как поставить OS/2 APC2/MCP2 на машину с объемом 
+памяти больше 512МБ без уменьшения объема памяти на время настройки!<br>
+eComStation ставится нормально, родную полуось нужно патчить после уставновки…
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608209">
+        <div class="comment_item" id="comment_7608223">
+
+    <span class="parent_id" data-parent_id="7608209"></span>
+    <div class="comment_body">
+        <div class="info  is_topic_starter  " rel="7608223">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608223" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/dbanet/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/373c2eeed5ba841bc6e54725f5684b9f_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/dbanet/" class="username">dbanet</a><span class="comma">,</span>
+            <time>20 мая 2014 в 19:43<span class="time_changed"> (комментарий был изменён)</span></time>
+
+            <a href="#comment_7608223" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608223" data-parent_id="7608209" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608209" data-id="7608223" data-parent_id="7608209" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            А в чём, собственно, проблема? Я буквально полтора года 
+назад ставил ACP2 на машину с четырьмя гигами рамяти и двумя 
+процессорами. И как бы всё работает, и на время установки я память не 
+вытаскивал.<br>
+<br>
+Warp 3 — да, 512 MiB там — максимум, иначе оно трапается. Нужно ядру 
+передавать ограниченное количество памяти — либо патченным ядерным 
+лодырем, либо вообще сторонний использовать. Вам про это написать?<br>
+<br>
+Вообще, поддержка памяти за барьером в 512 мегабайт появилась только в серверной версии Warp 3.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608223">
+        <div class="comment_item" id="comment_7608239">
+
+    <span class="parent_id" data-parent_id="7608223"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608239">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608239" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/ereinion/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/5842a62aa41862b07219e585c144484f_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/ereinion/" class="username">ereinion</a><span class="comma">,</span>
+            <time>20 мая 2014 в 19:47</time>
+
+            <a href="#comment_7608239" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608239" data-parent_id="7608223" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608223" data-id="7608239" data-parent_id="7608223" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Напишите пожалуйста, можно в личку.<br>
+Возможно у меня не последняя версия дистрибутива, но проблема есть. Зависает на последнем этапе установки.<br>
+Машины были использованы две — ThinkPad T43p и ThinkPad T60. Возможно 
+проблемы создает какое-то нестандартное решение IBM/Lenovo, но у меня 
+нет под рукой ни сравнимого десктопа, ни ноута другой марки.<br>
+По памяти, такая же проблема была с ACP2 лет 5 назад с DualP3-1000, 2048
+ ОЗУ на ASUS CUV4X-DLS, тогда побеждал это как раз уменьшением объема 
+памяти.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608239">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7608493">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608493">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608493" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 1: ↑1 и ↓0">+1</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/Zamuka/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/0dc5267317e63580ed739e4bb04f1e6e_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/Zamuka/" class="username">Zamuka</a><span class="comma">,</span>
+            <time>20 мая 2014 в 21:12</time>
+
+            <a href="#comment_7608493" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            <blockquote> просто возьмите любую дискету с DOS'ом</blockquote><br>
+Заставило почувствовать себя старым.<br>
+<br>
+Ладно дисковод я еще найду… и шлейф &gt;.&lt;, но PCI мультяха в каждом 
+шкафу не валяется, а с контроллерами на мамках в последнее время тяжко.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608493">
+        <div class="comment_item" id="comment_7608499">
+
+    <span class="parent_id" data-parent_id="7608493"></span>
+    <div class="comment_body">
+        <div class="info  is_topic_starter  " rel="7608499">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608499" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 1: ↑1 и ↓0">+1</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/dbanet/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/373c2eeed5ba841bc6e54725f5684b9f_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/dbanet/" class="username">dbanet</a><span class="comma">,</span>
+            <time>20 мая 2014 в 21:14</time>
+
+            <a href="#comment_7608499" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608499" data-parent_id="7608493" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608493" data-id="7608499" data-parent_id="7608493" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Ну вы же не собираетесь ставить IBM OS/2 1.0 на мамки, у 
+которых отсутствует FDD контроллер? Это было бы весьма интересно, 
+учитывая, что 1.0 предполагается ставить именно что с дискеток.<br>
+<br>
+А тут говорится об виртуальных машинах, в которую вставить дискетку вроде как не проблема…
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608499">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7608533">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608533">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608533" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 1: ↑1 и ↓0">+1</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/Atakua/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/a9383740e79bfea9dfb1e845c18efa3c_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/Atakua/" class="username">Atakua</a><span class="comma">,</span>
+            <time>20 мая 2014 в 21:28</time>
+
+            <a href="#comment_7608533" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Очень полезная статья для иллюстрации того факта, что 
+программирование «на sleep'ах» ни к чему хорошему не приводит. Т.е. при 
+попытках запуска такого софта внутри нового железа/ВМ приходится 
+учитывать разницу в задержках работы узлов. А задержки эти, как правило,
+ недокументированы.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608533">
+        <div class="comment_item" id="comment_7608563">
+
+    <span class="parent_id" data-parent_id="7608533"></span>
+    <div class="comment_body">
+        <div class="info  is_topic_starter  " rel="7608563">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608563" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 1: ↑1 и ↓0">+1</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/dbanet/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/373c2eeed5ba841bc6e54725f5684b9f_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/dbanet/" class="username">dbanet</a><span class="comma">,</span>
+            <time>20 мая 2014 в 21:39<span class="time_changed"> (комментарий был изменён)</span></time>
+
+            <a href="#comment_7608563" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608563" data-parent_id="7608533" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608533" data-id="7608563" data-parent_id="7608533" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Как вы могли заметить, проблемы с запуском в виртуалке случились не только из-за «программирования на слипах».<br>
+<br>
+И просто тогда уж JFYI, чтобы у кого-нибудь вдруг неверная общая картина
+ не выстроилась, и Linux этим страдал, причём спустя восемь лет после 
+OS/2 1.0:<br>
+<a href="http://www.os2museum.com/wp/?p=2426">www.os2museum.com/wp/?p=2426</a>
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608563">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7608753">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608753">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608753" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 4: ↑3 и ↓1">+2</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/Bluewolf/" class="avatar"><img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/df5655ef57e737a2356807ad3f08ef08_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/Bluewolf/" class="username">Bluewolf</a><span class="comma">,</span>
+            <time>20 мая 2014 в 22:57</time>
+
+            <a href="#comment_7608753" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Товарищи, поднимите человеку карму! Интересные ведь вещи пишет, а в минусе. Как так?
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608753">
+    </div>
+</div>
+
+</div>
+
+  					<p class="for_users_only_msg">Только зарегистрированные пользователи могут оставлять комментарии.<br><a href="https://habrahabr.ru/auth/login/">Войдите</a>, пожалуйста.</p>
+
+
+  	
+<form action="/json/favorites/" method="post" id="edit_tags_form" class="hidden">
+  <input name="action" value="add" type="hidden">
+  <input name="ti" value="0" type="hidden">
+  <input name="tt" value="0" type="hidden">
+  <label>Пометьте топик понятными вам метками, если хотите</label>
+  <input autocomplete="off" name="tags_string" class="tags_string" type="text">
+  <div class="description">Метки лучше разделять запятой. Например: <i>общение, социальные сети, myspace.com, подростки, мердок</i></div>
+  <input value="Сохранить" class="submit" type="submit"> или <a href="#" class="close" onclick="return close_edit_tags()">закрыть</a>
+</form>
+    
+    
+
+  </div>
+  <div class="sidebar_right">
+      	<div class="banner_300x100">
+		<!--  AdRiver code START. Type:AjaxJS Site: habrahabr PZ: 0 BN: 5 -->
+		<div id="adriver_banner_2100516578"></div>
+		<script type="text/javascript">
+			$(function(){
+				var keyword = '';
+				if (typeof crtg_content !== 'undefined' && crtg_content) { keyword = crtg_content; }
+
+				var custom = {4:ar_duo1};
+					custom[1] = 'antikvariat';
+					custom[2] = 'virtualization';
+					custom[3] = 'os';
+
+				new adriver("adriver_banner_2100516578", {sid: 176776, bt: 52, bn: 5, custom: custom, keyword: keyword});
+			}());
+		</script>
+	</div>
+
+
+  			<div class="banner_300x500">
+		<div id="adriver_banner_1863387959"></div>
+		<script type="text/javascript">
+			$(function(){
+				var keyword = '';
+				if (typeof crtg_content !== 'undefined' && crtg_content) { keyword = crtg_content; }
+
+				var custom = {4:ar_duo1};
+					custom[1] = 'antikvariat';
+					custom[2] = 'virtualization';
+					custom[3] = 'os';
+
+				new adriver("adriver_banner_1863387959", {sid: 176776, bt: 52, bn: 1, custom: custom, keyword: keyword});
+			}());
+		</script>
+	</div>
+
+  		
+  		
+<div class="block daily_best_posts">
+  <div class="title">Лучшее <sup>за 24 часа</sup></div>
+  <div class="posts_list">
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223553/" class="post_name">Суперкомпьютер оплошал</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223527/" class="post_name">Octotree: отображение кода на Github в виде дерева</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223277/" class="post_name">Запускаем IBM OS/2 1.0 в виртуальной машине: почему это сложно сделать</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/company/JetBrains/blog/223445/" class="post_name">Встречайте AppCode 3.0: встроенный дизайнер UI, плагин для Reveal и многое другое</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223535/" class="post_name">На пути к горе Шарп Curiosity пробурил песчаник и «пострелял» лазером</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223441/" class="post_name">Распознавание номеров: от А до 9. Часть 3</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223027/" class="post_name">Всё, что вы должны знать о прототипах, замыканиях и производительности</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223361/" class="post_name">Lock-free стек для Windows</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223571/" class="post_name">Массовое производство восьмиядерных процессоров Qualcomm начнётся уже летом</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/company/yotadevices/blog/223543/" class="post_name">Эксперимент «Лабораторная работа», или Как мы создали робота, пользующегося смартфоном</a>
+      </div>
+  </div>
+  <div class="all"><a href="http://habrahabr.ru/top/">все лучшие</a></div>
+</div>
+
+  	  
+
+
+<div class="block similar_posts">
+
+	<div class="title">Похожие посты</div>
+  <div class="posts_list">
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/218887/">Анализ приложения защищенного виртуальной машиной</a>
+    				<span class="when">10.04.2014</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/215523/">Свалка не вариант. 3 законных способа избавиться от старого железа</a>
+    				<span class="when">12.03.2014</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/206098/">Устанавливаем SteamOS на виртуальную машину</a>
+    				<span class="when">15.12.2013</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/205764/">Как бороться с утечками памяти в виртуальной машине, правильно закрывая браузер</a>
+    				<span class="when">12.12.2013</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/197474/">Внутреннее устройство llst, часть 3. Магия JIT, или как ускорить виртуальную машину в 50 раз</a>
+    				<span class="when">01.12.2013</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/202594/">Настройка доступа к сети виртуальных машин Hyper-V из разных подсетей</a>
+    				<span class="when">18.11.2013</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/183882/">Использование веб-клиента vSphere для развертывания виртуальных машин</a>
+    				<span class="when">20.06.2013</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/176957/">Запуск платформы управления виртуальными машинами VMmanager</a>
+    				<span class="when">24.04.2013</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/171555/">Виртуальные машины в Windows Azure: Data Disk, виртуальные сети и Availability Set</a>
+    				<span class="when">05.03.2013</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/21728/">Как сделать виртуальную машину для разработки под Windows SharePoint Services v3?</a>
+    				<span class="when">15.03.2008</span>
+      </div>
+  </div>			
+</div>
+
+
+	
+  	  
+<div class="block similar_questions">
+	<div class="title">Вопросы по теме</div>
+
+	<div class="posts_list">
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/88719">Как делать снэпшоты файловой системы без использования виртуальных машин?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/88273">Один мощный сервер и виртуализация VS несколько однотипных "слабых" серверов?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/88245">Что такое связанная копия в Virtualbox?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/88173">Репликация виртуальных машин между двумя кластерами Hyper-V</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/86118">Как просматривать виртуальные диски?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/71342">Хватит ли возможностей данных характеристик компьютера для виртуализации?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/65446">Виртуализация Windows Server 2008 R2 (64 bit). Почему очень медленный Disk IO?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/65090">Как заменить драйвер VMware SVGA II 128 gb?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/56404">Разграничение доступа к виртуальным машинам Hyper-V</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/53832">Есть ли какие-то способы решения проблемы с сетью в гостевой FreeBSD 9.x?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/53276">Как правильно переносить LXC контейнеры между машинами с разным железом?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/43642">Проброс видеокарты в mac (parallels)</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/42616">Виртуализация для домашнего использования</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/40497">Существует ли (знает ли кто) технология создания Virtual Machines «on demand»?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/20873">Можно ли установить виртуальную систему на внешний USB 2.0 HDD?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/11593">Антивирусный контроль "виртуалок"</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/94487">Каким образом возможно подключиться по ssh к виртуальной машине, если хост машина не подключена к сети?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/94307">Что такое VMWARE vSphere  ?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/94061">Какую выбрать ОС для создания VPS сервера?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/93367">Дистрибутивы программных роутеров</a>
+		</div>
+  </div>			
+		
+</div>
+
+  		
+  		
+
+	<div class="block live_broadcast">
+		<div class="title">Что обсуждают? </div>
+
+		<div class="live_broadcast_activity">
+				<div class="posts_list">
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223627#comments" class="post_name">Обходим грядущий лимит на международные почтовые отправления*</a>&nbsp;<span class="count">21</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223631#comments" class="post_name">Банки лезут в карман (в мобильный)</a>&nbsp;<span class="count">5</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223613#comments" class="post_name">В Стэнфорде создали новый тип кардиостимуляторов с беспроводным питанием</a>&nbsp;<span class="count">13</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223489#comments" class="post_name">Классика Computer Science</a>&nbsp;<span class="count">38</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223347#comments" class="post_name">Мобильные приложения для путешествий</a>&nbsp;<span class="count">36</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223553#comments" class="post_name">Суперкомпьютер оплошал</a>&nbsp;<span class="count">118</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/165213#comments" class="post_name">Touch-web: Swipe</a>&nbsp;<span class="count">27</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223643#comments" class="post_name">Новый модный молодёжный поисковик Спутник от Ростелекома уже завтра во всех интернетах стран</a>&nbsp;<span class="count">1</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223629#comments" class="post_name">Microsoft Surface Pro 3 на базе Intel Haswell доступен для предзаказа</a>&nbsp;<span class="count">8</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223615#comments" class="post_name">Отечественные проекты на Kickstarter /часть 4</a>&nbsp;<span class="count">4</span>
+							</div>
+				</div>
+				<div class="all"><a href="http://habrahabr.ru/posts/">все посты</a></div>
+		</div>
+
+	</div>
+  
+  			<!--  AdRiver code START. Type:AjaxJS Site: habrahabr PZ: 0 BN: 2 -->
+	
+	<div id="adriver_banner_480931290" class="adbanner"></div>
+	
+	
+	<script type="text/javascript">
+		$(function(){
+			var check_scroll_position = function() {
+				var height = $(window).height();
+				var scrollTop = $(window).scrollTop();
+				var scrollBottom = $(window).scrollTop() + height;
+				var blockTop = $('#adriver_banner_480931290').position().top;
+				var show = scrollTop < blockTop && blockTop < scrollBottom;
+				//console.log('scroll', scrollTop, blockTop, scrollBottom, show)
+				if( show ){
+					//console.log('show bn2');
+					$( window ).off('scroll', check_scroll_position);
+					$( window ).trigger('show_bn2');
+				}					
+			};
+			$( window ).on('scroll', check_scroll_position);
+		
+			$( window ).on('show_bn2', function(){
+				var keyword = '';
+				if (typeof crtg_content !== 'undefined' && crtg_content) { keyword = crtg_content; }
+				var custom = {4:ar_duo1};
+					custom[1] = 'antikvariat';
+					custom[2] = 'virtualization';
+					custom[3] = 'os';
+				new adriver("adriver_banner_480931290", {sid: 176776, bt: 52, bn: 2, custom: custom, keyword: keyword});
+			});
+		});
+	</script>
+	<!--  AdRiver code END  -->
+
+  		
+<div class="block best_company">
+
+		<div class="title">Компания дня <img src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/bg_cicle_help.png" title="
+Компания, чей пост набрал максимальное количество баллов&lt;br&gt;
+среди всех опубликованных в корпоративных блогах постах за &lt;br&gt;
+прошедшие сутки. Учитываются посты, для которых истек срок голосования &lt;br&gt;(3 дня с момента публикации)." class="help-tip"></div>
+
+		<div class="company_info">
+			<div class="name">
+			 <img class="favicon" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/90f1c142241c2dc270335c753f81408c_small.png" alt="Virt2real" height="16" width="16">
+			 <div class="company_name"><a href="http://habrahabr.ru/company/virt2real/" class="title">Virt2real</a></div>
+			</div>
+
+			<p>Последний пост:
+				<a href="http://habrahabr.ru/company/virt2real/blog/223183/">Самолёт, HD FPV, линк 600 км по 4G</a>
+			</p>
+
+			<div class="buttons">
+  			<div id="fans_count">458 подписчиков</div>
+			</div>
+		</div>
+
+	</div>
+
+
+  		
+
+  		
+	<div class="block new_vacanies">
+  <a href="http://brainstorage.me/jobs" class="title">Brainstorage</a>
+  <div class="vacancies">
+		<div class="job_item marked">
+			<a href="http://brainstorage.me/jobs/10607">Администратор PostgreSQL </a>
+		</div>
+		<div class="job_item marked">
+			<a href="http://brainstorage.me/jobs/18797">Администратор Linux</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/19001">Системный инженер</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/15917">Администратор/разработчик BizTalk</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/18909">System Administrator</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/18715">Системный администратор</a>
+		</div>
+		<div class="job_item marked">
+			<a href="http://brainstorage.me/jobs/18713">Системный администратор</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/16551">Разработчик Asp.net</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/18567">Системный администратор</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/18235">Support Engineer - Database </a>
+		</div>
+  </div>
+  <div class="all"><a href="http://brainstorage.me/jobs">все вакансии</a></div>
+</div>
+
+  		
+	<div class="block freelansim">
+	  <a href="http://freelansim.ru/" class="title"></a>
+	  <div class="tasks">
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68939">Парсинг input контента</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68923">Создать формы для базы данных MySQL (php+js)</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68933">Отрисовка открыток (128х128 px) </a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68929">Написать простой парсер</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68925">Повесить сайт на движке (АSP) на новый шаблон</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68913">Дизайн и верстка под xenforo</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68921">Переписать сайт на Symfony 2</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68917">Создание баннеров </a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68919">Починить верстку</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68915">Организовать колл центр</a>
+				</div>
+
+	  </div>
+	  <div class="all"><a href="http://freelansim.ru/tasks">все заказы</a></div>
+	</div>
+
+  		
+  		
+  		
+  </div>
+  <div class="clear"></div>
+
+  <script>
+    // hubs to GA
+      ga('send', 'event', 'Post_view', 'antikvariat (Старое железо)',  window.location.pathname + window.location.search);
+      ga('send', 'event', 'Post_view', 'virtualization (Виртуализация)',  window.location.pathname + window.location.search);
+      ga('send', 'event', 'Post_view', 'os (Операционные системы)',  window.location.pathname + window.location.search);
+  </script>
+
+
+
+        	
+	<div class="rotated_posts">
+			<div class="rotated_post ">
+				<a href="http://habrahabr.ru/post/221273/" class="grey">Интересные приемы программирования на Bash</a>
+			</div>
+			<div class="rotated_post ">
+				<a href="http://habrahabr.ru/post/218957/" class="grey">Роскомнадзор посоветовал размещать сайты на отечественных хостинг-площадках</a>
+			</div>
+			<div class="rotated_post last">
+				<a href="http://habrahabr.ru/company/papabubadiop/blog/215913/" class="grey">Flappy Bot для Flappy Bird</a>
+			</div>
+		<div class="clear"></div>
+	</div>
+
+
+        <div class="clear"></div>
+
+        <div class="footer_panel">
+          <div id="footer">
+	<dl>
+		<dd><a href="https://habrahabr.ru/auth/login/">Войти</a></dd>
+		<dd><a href="https://habrahabr.ru/auth/register/">Регистрация</a></dd>
+	</dl>
+	<dl>
+		<dt>Разделы</dt>
+		<dd><a href="http://habrahabr.ru/posts/top/">Посты</a></dd>
+		<dd><a href="http://habrahabr.ru/hubs/">Хабы</a></dd>
+		<dd><a href="http://habrahabr.ru/companies/">Компании</a></dd>
+		<dd><a href="http://habrahabr.ru/users/">Пользователи</a></dd>
+		<dd><a href="http://toster.ru/?_aa=press_anykey">Q&amp;A</a></dd>
+		<dd><a href="http://habrahabr.ru/sandbox/">Песочница</a></dd>
+		
+	</dl>	
+	<dl>
+		<dt>Инфо</dt>
+		<dd><a href="http://habrahabr.ru/info/about/">О сайте</a></dd>
+		<dd><a href="http://habrahabr.ru/info/help/rules/">Правила</a></dd>
+		<dd><a href="http://habrahabr.ru/info/help/">Помощь</a></dd>
+		<dd><a href="http://habrahabr.ru/info/agreement/">Соглашение</a></dd>
+	</dl>
+	<dl>
+		<dt>Услуги</dt>
+		<dd><a href="http://habrahabr.ru/info/advertising/">Реклама</a></dd>
+		<dd><a href="http://habrahabr.ru/info/advertising/corporate/">Корпоративные тарифы</a></dd>
+		<dd><a href="http://habrahabr.ru/info/advertising/workshops/">Семинары</a></dd>
+		<dd><a href="http://habrahabr.ru/special/">Спецпроекты</a></dd>
+	</dl>
+	<dl>
+		<dt>Разное</dt>
+		<dd><a href="http://habrahabr.ru/apps/">Приложения</a></dd>
+		<dd><a href="http://habrahabr.ru/special/testdrive/">Тест-драйвы</a></dd>
+		<dd><a href="http://habrahabr.ru/info/hello_startup/">Помощь стартапам</a></dd>
+		<dd><a href="http://habrahabr.ru/special/minsvyaz/">Льготы стартапам</a></dd>
+	</dl>
+	<div class="copyright">
+
+		<div class="about">
+			<a href="http://tmtm.ru/">TM</a>
+			© 2006–2014
+			<br><br>
+			<a href="http://habrahabr.ru/feedback/">Служба поддержки</a><br><br>
+			<a href="http://m.habrahabr.ru/">Мобильная версия</a><br><br>
+			
+
+			<div class="social_accounts">
+				<a href="https://twitter.com/habrahabr" class="tw"></a>
+				<a href="https://www.facebook.com/habrahabr.ru" class="fb"></a>
+				<a href="http://vk.com/habr" class="vk"></a>
+				<!-- <a href="" class="gp"></a> //-->
+			</div>
+
+		</div>
+	</div>
+
+</div>    
+          <div class="footer_logos">
+		
+		<div class="project brainstorage">
+			<a href="http://brainstorage.ru/" class="icon "></a>
+			<div class="text">Все мозги в одном месте</div>
+		</div>
+
+		<div class="project toster">
+			<a href="http://toster.ru/" class="icon "></a>
+			<div class="text">Q&amp;A-сервис для разработчиков</div>
+		</div>
+		
+		<div class="project freelansim">
+			<a href="http://freelansim.ru/" class="icon "></a>
+			<div class="text">Заказы для фрилансеров</div>
+		</div>
+		
+		<div class="project autokadabra">
+			<a href="http://autokadabra.ru/" class="icon "></a>
+			<div class="text ">Уютная и дружелюбная</div>
+		</div>
+		
+</div>
+
+        </div>
+      </div>
+    </div>
+  
+
+      <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery_002.js"></script>
+      <script type="text/javascript">
+        $(document).ready( function(){
+          window.tmidLogin = function(){ return false; };
+          if( $.cookie('tmid_no_check') == undefined ) {
+            var expire = new Date();
+            expire.setMinutes(expire.getMinutes() + 10 );
+            $.cookie('tmid_no_check', 1, { expires: expire } );
+            $.getScript("https://id.tmtm.ru/checklogin", function(){
+              if( window.tmidLogin() ) {
+
+                  var href = $('#login').attr('href');
+
+                  if( href !== undefined ) {
+                      window.location.href = href;
+                  }
+              }
+            });
+          }
+        });
+      </script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $.jGrowl.defaults.closerTemplate = '<div>Закрыть все уведомления</div>';         
+        $(".help-tip").tipTip({maxWidth: "300px", edgeOffset: 10});  
+      });
+      // global vars
+      var g_base_url = 'habrahabr.ru';
+      var g_show_xpanel = false;
+      var g_base_fullurl = 'http://habrahabr.ru/';
+      var g_is_guest = false;
+    </script>
+    
+    <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/shortcuts.js"></script>
+    
+    
+    <script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/float_block.js"></script>
+    
+    	<script type="text/javascript" src="%D0%97%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D0%B5%D0%BC%20IBM%20OS_2%201.0%20%D0%B2%20%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D0%BC%D0%B0%D1%88%D0%B8%D0%BD%D0%B5%20%20%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%20%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/a"></script>
+
+    
+
+  
+
+<div id="AutocompleteContainter_9547c" style="position: absolute; z-index: 9999; top: 2px; left: 0px;"><div class="autocomplete-w1"><div class="autocomplete" id="Autocomplete_9547c" style="display: none; width: 300px; max-height: 400px;"></div></div></div><div id="AutocompleteContainter_4e3af" style="position: absolute; z-index: 9999; top: 853px; left: 0px;"><div class="autocomplete-w1"><div class="autocomplete" id="Autocomplete_4e3af" style="display: none; width: 300px; max-height: 400px;"></div></div></div></body></html>

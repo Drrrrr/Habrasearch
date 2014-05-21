@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta content="width=1024" name="viewport">
+    
+    
+    <title>Octotree: отображение кода на Github в виде дерева / Хабрахабр</title>
+    
+    <meta name="yandex-verification" content="67d46b975fa41645"> <!-- яндекс вебмастер - верификация -->
+
+    <meta name="description" content="
+
+Github является незаменимым сайтом, на котором разработчики проводят многие часы. Некоторым хочется добавить удобства в повседневную работу. Расширение Octotree для Firefox/Chrome/Safari делает...">    
+    <meta name="keywords" content="Octotree, Github, GitHub API, дерево">
+    
+    	<meta property="fb:app_id" content="444736788986613"> 
+<meta property="og:type" content="article"> 
+<meta property="og:url" content="http://habrahabr.ru/post/223527/"> 
+<meta property="og:title" content="Octotree: отображение кода на Github в виде дерева"> 
+	<meta property="og:image" content="http://habrastorage.org/getpro/habr/post_images/2b6/189/f84/2b6189f8420c0d467b5771f87805f13a.png">
+	<link rel="image_src" href="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/2b6189f8420c0d467b5771f87805f13a.png">
+	
+<meta property="og:description" content="Github является незаменимым сайтом, на котором разработчики проводят многие часы. Некоторым хочется добавить удобства в повседневную работу. Расширение...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@habrahabr">
+
+
+      <link href="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all.css" rel="stylesheet" media="all">
+  
+    <link href="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/navbar.css" rel="stylesheet" media="all">
+
+      <link href="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/posts.css" rel="stylesheet" media="all">
+  <link href="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/comments.css" rel="stylesheet" media="all">
+  <link href="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/forms.css" rel="stylesheet" media="all">
+  <link href="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/highlight.css" rel="stylesheet" media="all">
+
+
+    <link href="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/printer.css" rel="stylesheet" media="print">
+
+    
+    
+
+      <script src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/watch.js" async="" type="text/javascript"></script><script src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/analytics.js" async=""></script><script src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all.js"></script>
+    <script src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/_navbar.js"></script>
+
+
+      <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery.js"></script>
+  <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery_002.js"></script>
+  <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/wysiwyg.js"></script>
+  <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/highlight.js"></script>
+  <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery-ui-highlight.js"></script>
+  <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/posts.js"></script>
+  <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/comments.js"></script>
+  <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all_002.js"></script>
+
+
+      <!-- www.criteo.com/ru -->
+<script type="text/javascript">
+  var crtg_nid="2580";
+  var crtg_cookiename="cto_rtt";
+  var crtg_varname="crtg_content";
+  function crtg_getCookie(c_name){
+    var i,x,y,ARRCookies=document.cookie.split(";");
+    for(i=0;i<ARRCookies.length;i++){
+      x=ARRCookies[i].substr(0,ARRCookies[i].indexOf("="));
+      y=ARRCookies[i].substr(ARRCookies[i].indexOf("=")+1);
+      x=x.replace(/^\s+|\s+$/g,"");
+      if(x==c_name){return unescape(y);}
+    }
+    return'';
+  }
+  var crtg_content = crtg_getCookie(crtg_cookiename);var crtg_rnd=Math.floor(Math.random()*99999999999);
+  var crtg_url=location.protocol+'//rtax.criteo.com/delivery/rta/rta.js?netId='+escape(crtg_nid);crtg_url+='&cookieName='+escape(crtg_cookiename);crtg_url+='&rnd='+crtg_rnd;crtg_url+='&varName=' + escape(crtg_varname);
+  var crtg_script=document.createElement('script');crtg_script.type='text/javascript';crtg_script.src=crtg_url;crtg_script.async=true;
+  if(document.getElementsByTagName("head").length>0)document.getElementsByTagName("head")[0].appendChild(crtg_script);
+  else
+  if(document.getElementsByTagName("body").length>0)document.getElementsByTagName("body")[0].appendChild(crtg_script);
+</script><script async="" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/rta.js" type="text/javascript"></script>
+      <script>
+        var N = 5;
+        var ar_duo1 = Math.floor(Math.random()*N+1);
+      </script>
+      <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/adriver.js"></script>
+
+    <link title="Хабрахабр / Комментарии к публикации «Octotree: отображение кода на Github в виде дерева»" type="application/rss+xml" rel="alternate" href="http://habrahabr.ru/rss/post/223527/">
+        
+    
+    
+<script type="text/javascript">
+
+    var user_type = "guest";
+    var username = 'guest';
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-726094-1',  'auto' ); 
+
+  ga('require', 'displayfeatures');
+  ga('set', 'dimension1', user_type); // user type - guest/readonly/habrauser
+  ga('set', 'dimension2', username); // username
+
+
+  ga('send', 'pageview');
+  
+</script>
+
+
+
+<script type="text/javascript">
+var pp_gemius_identifier = new String('p8zr4.NqiIZJgD2cnP2s5fWWnIQFHrAvZ280B955gIr.f7');
+</script>
+<script src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/gemius.js"></script>
+
+
+
+
+
+
+
+    
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter24049213 = new Ya.Metrika({id:24049213,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/24049213" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+  </head>
+
+  <body>
+    
+    <div id="layout">
+      <div id="navbar_overlay" class="hidden"></div>
+<div id="navbar">
+  <div class="nav_panel">
+    <a href="http://habrahabr.ru/" class="logo"></a>
+      <a href="http://habrahabr.ru/posts/" class="tab tab_menu" data-tab="menu_tab" title="Меню"></a>
+      <a href="https://habrahabr.ru/auth/login/" class="tab tab_login" id="login" title="Войти"></a>
+    
+    <a href="#" class="scroll_to_up hidden scroll_to_up_for_guest" id="scroll_to_top" title="Наверх"></a>
+  </div>
+  <div class="nav_tabs_content ">
+    
+    <div class="nav_tab " id="menu_tab">
+      <div class="title">Разделы</div>
+      <form action="/search/" method="get" class="global_search_form">
+        <div>
+          <input name="q" placeholder="Поиск" type="text">
+        </div>
+      </form>
+      <div class="menu">
+        <a href="http://habrahabr.ru/posts/top/">Посты</a>
+        <a href="http://habrahabr.ru/hubs/">Хабы</a>
+        <a href="http://habrahabr.ru/companies/">Компании</a>
+        <a href="http://habrahabr.ru/users/">Пользователи</a>
+        <a href="http://toster.ru/" class="new_window">Q&amp;A</a>
+        <a href="http://habrahabr.ru/sandbox/">Песочница</a>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+      <div class="inner">
+        
+                
+        
+
+        	
+  <div class="content_left">
+  	
+
+
+
+
+
+    <div class="post_show">
+  	  
+  <div class="post shortcuts_item" id="post_223527">
+  	<div class="published">вчера в 17:17</div>
+    <h1 class="title">
+	    
+        <span class="post_title">Octotree: отображение кода на Github в виде дерева</span>
+      
+			
+  	</h1>
+  	
+  	<div class="hubs">
+		<a href="http://habrahabr.ru/hub/chrome_extensions/" class="hub " title="Вы не подписаны на этот хаб">Chrome Extensions</a>, 
+		<a href="http://habrahabr.ru/hub/github/" class="hub " title="Вы не подписаны на этот хаб">GitHub</a><span class="profiled_hub" title="Профильный хаб">*</span>, 
+		<a href="http://habrahabr.ru/hub/ui/" class="hub " title="Вы не подписаны на этот хаб">Интерфейсы</a><span class="profiled_hub" title="Профильный хаб">*</span>
+</div>
+
+  	
+  	<div class="content html_format">
+    	<img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/2b6189f8420c0d467b5771f87805f13a.png"><br>
+<br>
+Github является незаменимым сайтом, на котором разработчики проводят 
+многие часы. Некоторым хочется добавить удобства в повседневную работу. 
+Расширение <a href="https://github.com/buunguyen/octotree/">Octotree</a> для Firefox/Chrome/Safari делает именно то, чего так не хватало на Github, а именно, отображает исходный код в виде дерева.<br>
+<a name="habracut"></a><br>
+Дерево отображается в левой части страницы. Такая навигация гораздо 
+удобнее стандартной и к тому же работает очень быстро. Гораздо легче 
+ориентироваться в больших проектах с многими вложенными директориями.<br>
+<br>
+<a href="https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc">Octotree для Chrome</a> в каталоге Chrome Store.<br>
+<br>
+Версии для Firefox и Safari пока находятся на модерации, но их можно вручную установить со <a href="https://github.com/buunguyen/octotree/tree/master/dist">страницы проекта</a>.<br>
+<br>
+Разработчик расширения Буу Нгуен (Buu Nguyen) отмечает, что Octotree 
+использует GitHub API для получения метаданных. По умолчанию делаются 
+неаутентифицированные запросы, но аутентификация требуется для просмотра
+ частных репозиториев, а также после превышения лимита на 
+неаутентифицированные запросы. В этом случае расширение попросит <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use">персональный токен Github</a>.<br>
+<br>
+Ввести токен можно вручную командой в веб-консоли браузера (в инструментах разработчика).<br>
+<br>
+<pre><code class="sql">localStorage.setItem('octotree.github_access_token', '<span class="operator"><span class="keyword">REPLACE</span> <span class="keyword">WITH</span> TOKEN<span class="string">')</span></span></code></pre> 
+    	<div class="clear"></div> 	
+  	</div>
+    
+<ul class="tags">
+	<li><a href="http://habrahabr.ru/search/?q=%5BOctotree%5D&amp;target_type=posts" rel="tag">Octotree</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5BGithub%5D&amp;target_type=posts" rel="tag">Github</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5BGitHub%20API%5D&amp;target_type=posts" rel="tag">GitHub API</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%5D&amp;target_type=posts" rel="tag">дерево</a></li>
+</ul>
+
+    <div class="infopanel_wrapper">
+	<div class="infopanel " id="infopanel_post_223527">
+	
+				<div class="voting   ">
+	
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+	
+					<div class="mark">
+								<span class="score" title="Результат голосования виден только авторизованным пользователям">—</span>
+					</div>
+					
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+		
+				</div>
+	
+		<div class="pageviews" title="Просмотры поста">12386</div>
+			
+		<div class="favorite">
+				<a class="guest" href="#" onclick="return false;" title="Только зарегистрированные пользователи могут добавлять посты в избранное"></a>
+		</div>
+		<div class="favs_count" title="Количество пользователей, добавивших пост в избранное">139</div>
+		
+		
+		
+	
+	
+	
+	
+				<div class="author">
+					<a title="Автор текста" href="http://habrahabr.ru/users/alizar/">alizar</a>
+					<span class="rating" title="рейтинг пользователя">1566,9</span>
+						<a href="https://plus.google.com/109929493370452160902/?rel=author" class="googleplus_profile">G+</a>
+				</div>
+		
+	
+	
+		
+			<div class="share">
+				<div class="twitter">
+					<a href="http://twitter.com/intent/tweet?text=Octotree%3A+%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5+%D0%BA%D0%BE%D0%B4%D0%B0+%D0%BD%D0%B0+Github+%D0%B2+%D0%B2%D0%B8%D0%B4%D0%B5+%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0+http://habr.ru/p/223527/+via+%40habrahabr+%23habr" title="Опубликовать ссылку в Twitter" target="_blank"></a>
+				</div>
+				<div class="vkontakte">
+					<a href="http://vk.com/share.php?url=http://habrahabr.ru/post/223527/" title="Опубликовать ссылку во ВКонтакте" onclick="window.open(this.href, 'Опубликовать ссылку во Вконтакте', 'width=800,height=300'); return false"></a>
+				</div>
+				<div class="facebook">
+					<a href="https://www.facebook.com/sharer/sharer.php?u=http://habrahabr.ru/post/223527/" title="Опубликовать ссылку в Facebook" onclick="window.open(this.href, 'Опубликовать ссылку в Facebook', 'width=640,height=436,toolbar=0,status=0'); return false"></a>
+				</div>
+				<div class="googleplus">
+					<a href="https://plus.google.com/share?url=http://habrahabr.ru/post/223527/" title="Опубликовать ссылку в Google Plus" onclick="window.open(this.href, 'Опубликовать ссылку в Google Plus', 'width=800,height=300'); return false"></a>
+				</div>
+			</div>
+	
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+
+
+    
+    
+	</div>
+
+    </div>
+
+  		
+	<div id="adriver_banner_132032996"></div>  
+
+  <script type="text/javascript">  
+	  function show_inner_banner_block(name, url){
+	  	if( typeof(name) !== 'undefined'){
+	  		$.get('/html/'+name+'/1400676126/', function(html){
+	  			$('#adriver_banner_132032996').html(html);
+	  			$('.'+name+'_inner_banner').removeClass('hidden');
+	  			if( typeof(url) !== 'undefined'){
+	  				$('.'+name+'_inner_banner .block_url').attr('href', url);
+	  			}
+	  		})
+	  	}
+	  }
+
+		$(function(){
+			var keyword = '';
+			if (typeof crtg_content !== 'undefined' && crtg_content) { keyword = crtg_content; }
+			var custom = { 4:ar_duo1 };
+				custom[1] = 'chrome_extensions';
+				custom[2] = 'github';
+				custom[3] = 'ui';
+
+            /* Антоша не удаляй это условие блеать! Как я тестить буду? */
+            //if (true)
+            //    show_inner_banner_block('beeline');
+            //else
+			    new adriver("adriver_banner_132032996", {sid: 176776, bt: 52, bn: 3, custom: custom, keyword: keyword});
+		});
+	</script>
+	
+
+
+  	
+  		<div class="comments_list " id="comments">
+
+  <h2 class="title ">Комментарии (<span id="comments_count">14</span>)
+  
+  
+  </h2>
+
+    <div class="comment_item" id="comment_7607811">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7607811">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607811" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 16: ↑16 и ↓0">+16</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/limonte/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/cf3dab7fc532e635769a5d509dd9d86d_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/limonte/" class="username">limonte</a><span class="comma">,</span>
+            <time>20 мая 2014 в 17:25</time>
+
+            <a href="#comment_7607811" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Какая красотища!
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607811">
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7607849">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7607849">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607849" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 2: ↑2 и ↓0">+2</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/mamiamradio/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/2abfebed7f190121e956688db98184aa_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/mamiamradio/" class="username">mamiamradio</a><span class="comma">,</span>
+            <time>20 мая 2014 в 17:35<span class="time_changed"> (комментарий был изменён)</span></time>
+
+            <a href="#comment_7607849" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Использую больше недели. Очень удобный палгин. Уже настолько
+ привык, что переключаясь в бразуер без установленного плагина удивляюсь
+ отсутствию дерева.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607849">
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7607965">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7607965">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607965" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 3: ↑3 и ↓0">+3</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/alexsoft/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/4c48b6babbc449cadc97a91200a94699_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/alexsoft/" class="username">alexsoft</a><span class="comma">,</span>
+            <time>20 мая 2014 в 18:07</time>
+
+            <a href="#comment_7607965" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Прекрасно! Просто шикарно! Очень круто! Большое спасибо за extension!
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607965">
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7607983">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7607983">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607983" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 2: ↑2 и ↓0">+2</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/cro/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/426172ae5b4569ff1a899c81b4f4f614_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/cro/" class="username">cro</a><span class="comma">,</span>
+            <time>20 мая 2014 в 18:16<span class="time_changed"> (комментарий был изменён)</span></time>
+
+            <a href="#comment_7607983" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Совершенно прекрасная вещь. Для полного счастья еще бы ссылки на RAW и подсветка синтаксиса raw средствами плагина.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607983">
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7607995">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7607995">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7607995" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 6: ↑6 и ↓0">+6</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/impwx/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/7ee22ab9492fc66bb567d974fcfcf095_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/impwx/" class="username">impwx</a><span class="comma">,</span>
+            <time>20 мая 2014 в 18:21</time>
+
+            <a href="#comment_7607995" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Было бы очень круто, если бы при переходе по ссылке напрямую
+ на файл или папку они автоматически выделялись бы в дереве.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7607995">
+        <div class="comment_item" id="comment_7608011">
+
+    <span class="parent_id" data-parent_id="7607995"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608011">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608011" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 4: ↑4 и ↓0">+4</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/limonte/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/cf3dab7fc532e635769a5d509dd9d86d_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/limonte/" class="username">limonte</a><span class="comma">,</span>
+            <time>20 мая 2014 в 18:26</time>
+
+            <a href="#comment_7608011" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608011" data-parent_id="7607995" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7607995" data-id="7608011" data-parent_id="7607995" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Хорошая идея, предложите автору: <a href="https://github.com/buunguyen/octotree/issues">github.com/buunguyen/octotree/issues</a>
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608011">
+        <div class="comment_item" id="comment_7608057">
+
+    <span class="parent_id" data-parent_id="7608011"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608057">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608057" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 4: ↑4 и ↓0">+4</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/impwx/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/7ee22ab9492fc66bb567d974fcfcf095_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/impwx/" class="username">impwx</a><span class="comma">,</span>
+            <time>20 мая 2014 в 18:40</time>
+
+            <a href="#comment_7608057" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608057" data-parent_id="7608011" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608011" data-id="7608057" data-parent_id="7608011" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            <a href="https://github.com/buunguyen/octotree/issues/81">Предложил</a>, посмотрим что получится.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608057">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7608313">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608313">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608313" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 2: ↑1 и ↓1">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/WarAngel_alk/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/00234510a24cd72f02cdb5b90d0270c6_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/WarAngel_alk/" class="username">WarAngel_alk</a><span class="comma">,</span>
+            <time>20 мая 2014 в 20:18<span class="time_changed"> (комментарий был изменён)</span></time>
+
+            <a href="#comment_7608313" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Только у меня так?<br>
+<div class="spoiler"><b class="spoiler_title">Скрытый текст</b><div style="display: none;" class="spoiler_text"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/e37ce35aa7c8632cb3a58dd53cf2d73a.png"></div></div>
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608313">
+        <div class="comment_item" id="comment_7608813">
+
+    <span class="parent_id" data-parent_id="7608313"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608813">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608813" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  negative">
+                    <span class="score" title="Всего 6: ↑2 и ↓4">–2</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/mariner/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/e06030cf9ca645718990acb843ed4dde_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/mariner/" class="username">mariner</a><span class="comma">,</span>
+            <time>20 мая 2014 в 23:22</time>
+
+            <a href="#comment_7608813" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608813" data-parent_id="7608313" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608313" data-id="7608813" data-parent_id="7608313" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format bad bad2">
+            да.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608813">
+    </div>
+</div>
+
+        <div class="comment_item" id="comment_7609291">
+
+    <span class="parent_id" data-parent_id="7608313"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7609291">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7609291" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/prg/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/eb90c4237cf3b4e09289ec0fb21244a9_small.png" alt=""></a>
+            <a href="http://habrahabr.ru/users/prg/" class="username">prg</a><span class="comma">,</span>
+            <time>21 мая 2014 в 06:21</time>
+
+            <a href="#comment_7609291" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7609291" data-parent_id="7608313" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608313" data-id="7609291" data-parent_id="7608313" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Нет, не только у вас<br>
+<br>
+Chromium Version 28.0.1500.71 Built on Ubuntu 13.04, running on LinuxMint 15
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7609291">
+    </div>
+</div>
+
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7608379">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608379">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608379" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark positive ">
+                    <span class="score" title="Всего 3: ↑3 и ↓0">+3</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/artyfarty/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/1a3e9470a1ac25ffa47637a8439817ef_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/artyfarty/" class="username">artyfarty</a><span class="comma">,</span>
+            <time>20 мая 2014 в 20:33</time>
+
+            <a href="#comment_7608379" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            А какие еще хорошие экстеншены про гитхаб бывают? Меня вот просто убивают некоторые неудобства issue tracker.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608379">
+    </div>
+</div>
+
+    <div class="comment_item" id="comment_7608973">
+
+    <span class="parent_id" data-parent_id="0"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608973">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608973" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/KvanTTT/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/493682d147e76ebcac189c32b3e56214_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/KvanTTT/" class="username">KvanTTT</a><span class="comma">,</span>
+            <time>21 мая 2014 в 00:50</time>
+
+            <a href="#comment_7608973" class="link_to_comment">#</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            У меня есть идея плагина GoToDefinition под GitHub для того,
+ чтобы можно было перемещаться по определениям классов, членов классов, 
+переменных внутри одного и нескольких файлов как в Visual Studio. Пока я
+ представляю как это сделать для .NET проектов (разбор C# или VB кода с 
+помощью Roslyn или NRefactory на сервере, взаимодействие с API с помощью
+ octokit на клиенте и octokit.net на сервере). Похожая функциональность 
+реализована на <a href="http://www.ohloh.net/">www.ohloh.net</a>, но это не гитхаб, да и не совсем так, как нужно, там это сделано.<br>
+<br>
+Как вы думаете, нужен ли такой экстеншен достаточному количеству человек
+ и насколько он сложен в реализации? Если да, то кто-нибудь хотел бы 
+поучаствовать в разработке?
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608973">
+        <div class="comment_item" id="comment_7608985">
+
+    <span class="parent_id" data-parent_id="7608973"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7608985">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7608985" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/KvanTTT/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/493682d147e76ebcac189c32b3e56214_small.jpg" alt=""></a>
+            <a href="http://habrahabr.ru/users/KvanTTT/" class="username">KvanTTT</a><span class="comma">,</span>
+            <time>21 мая 2014 в 00:56</time>
+
+            <a href="#comment_7608985" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7608985" data-parent_id="7608973" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608973" data-id="7608985" data-parent_id="7608973" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            После каждого коммита, проект будет заново 
+парсится/компилируется на каком-то сервере, так что на клиенте всегда 
+будет актуальная информация. Возможно даже разбор кода можно сделать в 
+браузере, но это сложно и утомительно.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7608985">
+    </div>
+</div>
+
+        <div class="comment_item" id="comment_7609335">
+
+    <span class="parent_id" data-parent_id="7608973"></span>
+    <div class="comment_body">
+        <div class="info  " rel="7609335">
+            <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+            <div id="voting_7609335" class="voting   ">
+                <span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+                <div class="mark  ">
+                    <span class="score" title="Всего 0: ↑0 и ↓0">0</span>
+                </div>
+            </div>
+            <a href="http://habrahabr.ru/users/b1rdex/" class="avatar"><img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+            <a href="http://habrahabr.ru/users/b1rdex/" class="username">b1rdex</a><span class="comma">,</span>
+            <time>21 мая 2014 в 07:27</time>
+
+            <a href="#comment_7609335" class="link_to_comment">#</a>
+                <div class="show_tree" data-id="7609335" data-parent_id="7608973" title="Показать ветку комментариев">↵</div>
+                <a href="#comment_7608973" data-id="7609335" data-parent_id="7608973" class="to_parent">↑</a>
+            <span class="to_chidren"></span>
+            <div class="clear"></div>
+        </div>
+        <div class="message html_format ">
+            Думаю fuzzy-поиск файлов был бы намного более востребован, чем goto definition. И сделать проще.
+        </div>
+        <div class="reply_form_placeholder"></div>
+        <div class="reply">
+            
+        </div>
+    </div>
+
+    <div class="reply_comments" id="reply_comments_7609335">
+    </div>
+</div>
+
+    </div>
+</div>
+
+</div>
+
+  					<p class="for_users_only_msg">Только зарегистрированные пользователи могут оставлять комментарии.<br><a href="https://habrahabr.ru/auth/login/">Войдите</a>, пожалуйста.</p>
+
+
+  	
+<form action="/json/favorites/" method="post" id="edit_tags_form" class="hidden">
+  <input name="action" value="add" type="hidden">
+  <input name="ti" value="0" type="hidden">
+  <input name="tt" value="0" type="hidden">
+  <label>Пометьте топик понятными вам метками, если хотите</label>
+  <input autocomplete="off" name="tags_string" class="tags_string" type="text">
+  <div class="description">Метки лучше разделять запятой. Например: <i>общение, социальные сети, myspace.com, подростки, мердок</i></div>
+  <input value="Сохранить" class="submit" type="submit"> или <a href="#" class="close" onclick="return close_edit_tags()">закрыть</a>
+</form>
+    
+    
+
+  </div>
+  <div class="sidebar_right">
+      	<div class="banner_300x100">
+		<!--  AdRiver code START. Type:AjaxJS Site: habrahabr PZ: 0 BN: 5 -->
+		<div id="adriver_banner_2100516578"></div>
+		<script type="text/javascript">
+			$(function(){
+				var keyword = '';
+				if (typeof crtg_content !== 'undefined' && crtg_content) { keyword = crtg_content; }
+
+				var custom = {4:ar_duo1};
+					custom[1] = 'chrome_extensions';
+					custom[2] = 'github';
+					custom[3] = 'ui';
+
+				new adriver("adriver_banner_2100516578", {sid: 176776, bt: 52, bn: 5, custom: custom, keyword: keyword});
+			}());
+		</script>
+	</div>
+
+
+  			<div class="banner_300x500">
+		<div id="adriver_banner_1863387959"></div>
+		<script type="text/javascript">
+			$(function(){
+				var keyword = '';
+				if (typeof crtg_content !== 'undefined' && crtg_content) { keyword = crtg_content; }
+
+				var custom = {4:ar_duo1};
+					custom[1] = 'chrome_extensions';
+					custom[2] = 'github';
+					custom[3] = 'ui';
+
+				new adriver("adriver_banner_1863387959", {sid: 176776, bt: 52, bn: 1, custom: custom, keyword: keyword});
+			}());
+		</script>
+	</div>
+
+  		
+  		
+<div class="block daily_best_posts">
+  <div class="title">Лучшее <sup>за 24 часа</sup></div>
+  <div class="posts_list">
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223553/" class="post_name">Суперкомпьютер оплошал</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223527/" class="post_name">Octotree: отображение кода на Github в виде дерева</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223277/" class="post_name">Запускаем IBM OS/2 1.0 в виртуальной машине: почему это сложно сделать</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/company/JetBrains/blog/223445/" class="post_name">Встречайте AppCode 3.0: встроенный дизайнер UI, плагин для Reveal и многое другое</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223535/" class="post_name">На пути к горе Шарп Curiosity пробурил песчаник и «пострелял» лазером</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223441/" class="post_name">Распознавание номеров: от А до 9. Часть 3</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223027/" class="post_name">Всё, что вы должны знать о прототипах, замыканиях и производительности</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223361/" class="post_name">Lock-free стек для Windows</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/223571/" class="post_name">Массовое производство восьмиядерных процессоров Qualcomm начнётся уже летом</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/company/yotadevices/blog/223543/" class="post_name">Эксперимент «Лабораторная работа», или Как мы создали робота, пользующегося смартфоном</a>
+      </div>
+  </div>
+  <div class="all"><a href="http://habrahabr.ru/top/">все лучшие</a></div>
+</div>
+
+  	  
+
+
+<div class="block similar_posts">
+
+	<div class="title">Похожие посты</div>
+  <div class="posts_list">
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/223229/">Типограф Муравьёва опубликован на GitHub</a>
+    				<span class="when">18.05.2014</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/222909/">campus:core — пример библиотеки для реализации API в системе с унаследованным кодом</a>
+    				<span class="when">16.05.2014</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/222753/">Исходный код ASP.NET vNext опубликован на Github</a>
+    				<span class="when">14.05.2014</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/222549/">Будущее API в 2014 году</a>
+    				<span class="when">13.05.2014</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/222411/">Python Webmoney API</a>
+    				<span class="when">12.05.2014</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/222259/">Разработка REST API на Express, Restify, hapi и LoopBack</a>
+    				<span class="when">08.05.2014</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/222041/">GitHub открыл исходный код текстового редактора Atom для разработчиков</a>
+    				<span class="when">06.05.2014</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/221949/">Правильный подход к использованию API Вконтакте</a>
+    				<span class="when">06.05.2014</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/221707/">Удаленный доступ к принятым платежам и статистике проекта по API в Funding.To</a>
+    				<span class="when">04.05.2014</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/221139/">Вредные советы от создателей API Яндекс.Карт. Как сделать так, чтобы всё было плохо</a>
+    				<span class="when">28.04.2014</span>
+      </div>
+  </div>			
+</div>
+
+
+	
+  	  
+<div class="block similar_questions">
+	<div class="title">Вопросы по теме</div>
+
+	<div class="posts_list">
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/96127">Как проще заливать Arduino-скетчи на GitHub?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/95705">В удаленный репозиторий git случайно попал ненужный файл, как удалить?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/93653">Как перенаправить, проксировать git запрос?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/92971">Как обновлять CMS с github?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/91997">Форк репозитория с github pages</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/91399">Как удалить историю из репозитория форка?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/89611">Как подружить github c pivotal tracker?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/89391">Как 
+сделать git commit, если для написания коммента к коммиту открывается 
+Sublime Text 2, а Git Bash не регистрирует событие открытия редактора?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/89237">Где найти  опенсорс-проекты на гитхабе?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/88425">Как сконфигурировать charset=windows-1251 у сайта на github pages?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/87773">Как выделить сразу все строки в GitHub при комите?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/87058">Bitbucket (Github) - как организовать автоматический deploy?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/86978">Дизайн и Ruby on Rails - как интегрировать?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/86480">Почему не видны коммиты на сайте github.com ?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/86418">Rails: git commit, git pull - как создать коммит?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/85546">MVC маршрутизатор на PHP - есть ли изъяны?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/84586">Как избавиться от запроса пароля в TortoiseGit (при push)?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/82568">Как настроить синхронизацию проекта на github и production сервера?</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/82072">Git и github: не отправляются изменения в удаленный репозиторий</a>
+		</div>
+    	<div class="post_item">
+    	    <a class="post_name" href="https://toster.ru/q/82022">Как выкладывать релизы на github?</a>
+		</div>
+  </div>			
+		
+</div>
+
+  		
+  		
+
+	<div class="block live_broadcast">
+		<div class="title">Что обсуждают? </div>
+
+		<div class="live_broadcast_activity">
+				<div class="posts_list">
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223643#comments" class="post_name">Новый модный молодёжный поисковик Спутник от Ростелекома уже завтра во всех интернетах стран</a>&nbsp;<span class="count">2</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223583#comments" class="post_name">Вкладки (страницы) на одной странице на html/css с помощью :target</a>&nbsp;<span class="count">20</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223631#comments" class="post_name">Банки лезут в карман (в мобильный)</a>&nbsp;<span class="count">7</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223293#comments" class="post_name">WavPlayer — мы не ищем легких путей, мы их прокладываем</a>&nbsp;<span class="count">8</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223627#comments" class="post_name">Обходим грядущий лимит на международные почтовые отправления*</a>&nbsp;<span class="count">21</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223613#comments" class="post_name">В Стэнфорде создали новый тип кардиостимуляторов с беспроводным питанием</a>&nbsp;<span class="count">13</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223489#comments" class="post_name">Классика Computer Science</a>&nbsp;<span class="count">38</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223347#comments" class="post_name">Мобильные приложения для путешествий</a>&nbsp;<span class="count">36</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/223553#comments" class="post_name">Суперкомпьютер оплошал</a>&nbsp;<span class="count">118</span>
+							</div>
+							<div class="post_item">
+								
+								<a href="http://habrahabr.ru/post/165213#comments" class="post_name">Touch-web: Swipe</a>&nbsp;<span class="count">27</span>
+							</div>
+				</div>
+				<div class="all"><a href="http://habrahabr.ru/posts/">все посты</a></div>
+		</div>
+
+	</div>
+  
+  			<!--  AdRiver code START. Type:AjaxJS Site: habrahabr PZ: 0 BN: 2 -->
+	
+	<div id="adriver_banner_480931290" class="adbanner"></div>
+	
+	
+	<script type="text/javascript">
+		$(function(){
+			var check_scroll_position = function() {
+				var height = $(window).height();
+				var scrollTop = $(window).scrollTop();
+				var scrollBottom = $(window).scrollTop() + height;
+				var blockTop = $('#adriver_banner_480931290').position().top;
+				var show = scrollTop < blockTop && blockTop < scrollBottom;
+				//console.log('scroll', scrollTop, blockTop, scrollBottom, show)
+				if( show ){
+					//console.log('show bn2');
+					$( window ).off('scroll', check_scroll_position);
+					$( window ).trigger('show_bn2');
+				}					
+			};
+			$( window ).on('scroll', check_scroll_position);
+		
+			$( window ).on('show_bn2', function(){
+				var keyword = '';
+				if (typeof crtg_content !== 'undefined' && crtg_content) { keyword = crtg_content; }
+				var custom = {4:ar_duo1};
+					custom[1] = 'chrome_extensions';
+					custom[2] = 'github';
+					custom[3] = 'ui';
+				new adriver("adriver_banner_480931290", {sid: 176776, bt: 52, bn: 2, custom: custom, keyword: keyword});
+			});
+		});
+	</script>
+	<!--  AdRiver code END  -->
+
+  		
+<div class="block best_company">
+
+		<div class="title">Компания дня <img src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/bg_cicle_help.png" title="
+Компания, чей пост набрал максимальное количество баллов&lt;br&gt;
+среди всех опубликованных в корпоративных блогах постах за &lt;br&gt;
+прошедшие сутки. Учитываются посты, для которых истек срок голосования &lt;br&gt;(3 дня с момента публикации)." class="help-tip"></div>
+
+		<div class="company_info">
+			<div class="name">
+			 <img class="favicon" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/90f1c142241c2dc270335c753f81408c_small.png" alt="Virt2real" height="16" width="16">
+			 <div class="company_name"><a href="http://habrahabr.ru/company/virt2real/" class="title">Virt2real</a></div>
+			</div>
+
+			<p>Последний пост:
+				<a href="http://habrahabr.ru/company/virt2real/blog/223183/">Самолёт, HD FPV, линк 600 км по 4G</a>
+			</p>
+
+			<div class="buttons">
+  			<div id="fans_count">458 подписчиков</div>
+			</div>
+		</div>
+
+	</div>
+
+
+  		
+
+  		
+	<div class="block new_vacanies">
+  <a href="http://brainstorage.me/jobs" class="title">Brainstorage</a>
+  <div class="vacancies">
+		<div class="job_item marked">
+			<a href="http://brainstorage.me/jobs/3345">Дизайнер iOS интерфейсов</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/18881">Дизайнер сайтов</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/1867">Дизайнер интерфейсов</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/17667">Дизайнер</a>
+		</div>
+		<div class="job_item marked">
+			<a href="http://brainstorage.me/jobs/18773">Дизайнер</a>
+		</div>
+		<div class="job_item marked">
+			<a href="http://brainstorage.me/jobs/12567">Дизайнер мобильных интерфейсов</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/17953">3D Modeler</a>
+		</div>
+		<div class="job_item marked">
+			<a href="http://brainstorage.me/jobs/6033">UI/UX дизайнер</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/18665">Эксперт по юзабилити/пользовательскому взаимодействию</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://brainstorage.me/jobs/18563">Flash-аниматор (Playrix) </a>
+		</div>
+  </div>
+  <div class="all"><a href="http://brainstorage.me/jobs">все вакансии</a></div>
+</div>
+
+  		
+	<div class="block freelansim">
+	  <a href="http://freelansim.ru/" class="title"></a>
+	  <div class="tasks">
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68939">Парсинг input контента</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68923">Создать формы для базы данных MySQL (php+js)</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68933">Отрисовка открыток (128х128 px) </a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68929">Написать простой парсер</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68925">Повесить сайт на движке (АSP) на новый шаблон</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68913">Дизайн и верстка под xenforo</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68921">Переписать сайт на Symfony 2</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68917">Создание баннеров </a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68919">Починить верстку</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/68915">Организовать колл центр</a>
+				</div>
+
+	  </div>
+	  <div class="all"><a href="http://freelansim.ru/tasks">все заказы</a></div>
+	</div>
+
+  		
+  		
+  		
+  </div>
+  <div class="clear"></div>
+
+  <script>
+    // hubs to GA
+      ga('send', 'event', 'Post_view', 'chrome_extensions (Chrome Extensions)',  window.location.pathname + window.location.search);
+      ga('send', 'event', 'Post_view', 'github (GitHub)',  window.location.pathname + window.location.search);
+      ga('send', 'event', 'Post_view', 'ui (Интерфейсы)',  window.location.pathname + window.location.search);
+  </script>
+
+
+
+        	
+	<div class="rotated_posts">
+			<div class="rotated_post ">
+				<a href="http://habrahabr.ru/post/210526/" class="grey">У китайского лунохода — серьёзные проблемы</a>
+			</div>
+			<div class="rotated_post ">
+				<a href="http://habrahabr.ru/post/214249/" class="grey">Законопроект об ограничении интернет-платежей принят в первом чтении</a>
+			</div>
+			<div class="rotated_post last">
+				<a href="http://habrahabr.ru/post/218887/" class="grey">Анализ приложения защищенного виртуальной машиной</a>
+			</div>
+		<div class="clear"></div>
+	</div>
+
+
+        <div class="clear"></div>
+
+        <div class="footer_panel">
+          <div id="footer">
+	<dl>
+		<dd><a href="https://habrahabr.ru/auth/login/">Войти</a></dd>
+		<dd><a href="https://habrahabr.ru/auth/register/">Регистрация</a></dd>
+	</dl>
+	<dl>
+		<dt>Разделы</dt>
+		<dd><a href="http://habrahabr.ru/posts/top/">Посты</a></dd>
+		<dd><a href="http://habrahabr.ru/hubs/">Хабы</a></dd>
+		<dd><a href="http://habrahabr.ru/companies/">Компании</a></dd>
+		<dd><a href="http://habrahabr.ru/users/">Пользователи</a></dd>
+		<dd><a href="http://toster.ru/?_aa=press_anykey">Q&amp;A</a></dd>
+		<dd><a href="http://habrahabr.ru/sandbox/">Песочница</a></dd>
+		
+	</dl>	
+	<dl>
+		<dt>Инфо</dt>
+		<dd><a href="http://habrahabr.ru/info/about/">О сайте</a></dd>
+		<dd><a href="http://habrahabr.ru/info/help/rules/">Правила</a></dd>
+		<dd><a href="http://habrahabr.ru/info/help/">Помощь</a></dd>
+		<dd><a href="http://habrahabr.ru/info/agreement/">Соглашение</a></dd>
+	</dl>
+	<dl>
+		<dt>Услуги</dt>
+		<dd><a href="http://habrahabr.ru/info/advertising/">Реклама</a></dd>
+		<dd><a href="http://habrahabr.ru/info/advertising/corporate/">Корпоративные тарифы</a></dd>
+		<dd><a href="http://habrahabr.ru/info/advertising/workshops/">Семинары</a></dd>
+		<dd><a href="http://habrahabr.ru/special/">Спецпроекты</a></dd>
+	</dl>
+	<dl>
+		<dt>Разное</dt>
+		<dd><a href="http://habrahabr.ru/apps/">Приложения</a></dd>
+		<dd><a href="http://habrahabr.ru/special/testdrive/">Тест-драйвы</a></dd>
+		<dd><a href="http://habrahabr.ru/info/hello_startup/">Помощь стартапам</a></dd>
+		<dd><a href="http://habrahabr.ru/special/minsvyaz/">Льготы стартапам</a></dd>
+	</dl>
+	<div class="copyright">
+
+		<div class="about">
+			<a href="http://tmtm.ru/">TM</a>
+			© 2006–2014
+			<br><br>
+			<a href="http://habrahabr.ru/feedback/">Служба поддержки</a><br><br>
+			<a href="http://m.habrahabr.ru/">Мобильная версия</a><br><br>
+			
+
+			<div class="social_accounts">
+				<a href="https://twitter.com/habrahabr" class="tw"></a>
+				<a href="https://www.facebook.com/habrahabr.ru" class="fb"></a>
+				<a href="http://vk.com/habr" class="vk"></a>
+				<!-- <a href="" class="gp"></a> //-->
+			</div>
+
+		</div>
+	</div>
+
+</div>    
+          <div class="footer_logos">
+		
+		<div class="project brainstorage">
+			<a href="http://brainstorage.ru/" class="icon "></a>
+			<div class="text">Все мозги в одном месте</div>
+		</div>
+
+		<div class="project toster">
+			<a href="http://toster.ru/" class="icon "></a>
+			<div class="text">Q&amp;A-сервис для разработчиков</div>
+		</div>
+		
+		<div class="project freelansim">
+			<a href="http://freelansim.ru/" class="icon "></a>
+			<div class="text">Заказы для фрилансеров</div>
+		</div>
+		
+		<div class="project autokadabra">
+			<a href="http://autokadabra.ru/" class="icon "></a>
+			<div class="text ">Уютная и дружелюбная</div>
+		</div>
+		
+</div>
+
+        </div>
+      </div>
+    </div>
+  
+
+      <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery_002.js"></script>
+      <script type="text/javascript">
+        $(document).ready( function(){
+          window.tmidLogin = function(){ return false; };
+          if( $.cookie('tmid_no_check') == undefined ) {
+            var expire = new Date();
+            expire.setMinutes(expire.getMinutes() + 10 );
+            $.cookie('tmid_no_check', 1, { expires: expire } );
+            $.getScript("https://id.tmtm.ru/checklogin", function(){
+              if( window.tmidLogin() ) {
+
+                  var href = $('#login').attr('href');
+
+                  if( href !== undefined ) {
+                      window.location.href = href;
+                  }
+              }
+            });
+          }
+        });
+      </script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $.jGrowl.defaults.closerTemplate = '<div>Закрыть все уведомления</div>';         
+        $(".help-tip").tipTip({maxWidth: "300px", edgeOffset: 10});  
+      });
+      // global vars
+      var g_base_url = 'habrahabr.ru';
+      var g_show_xpanel = false;
+      var g_base_fullurl = 'http://habrahabr.ru/';
+      var g_is_guest = false;
+    </script>
+    
+    <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/shortcuts.js"></script>
+    
+    
+    <script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/float_block.js"></script>
+    
+    	<script type="text/javascript" src="Octotree%20%20%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BA%D0%BE%D0%B4%D0%B0%20%D0%BD%D0%B0%20Github%20%D0%B2%20%D0%B2%D0%B8%D0%B4%D0%B5%20%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/a"></script>
+
+    
+
+  
+
+<div id="AutocompleteContainter_17591" style="position: absolute; z-index: 9999; top: 2px; left: 0px;"><div class="autocomplete-w1"><div class="autocomplete" id="Autocomplete_17591" style="display: none; width: 300px; max-height: 400px;"></div></div></div><div id="AutocompleteContainter_e73a4" style="position: absolute; z-index: 9999; top: 658px; left: 0px;"><div class="autocomplete-w1"><div class="autocomplete" id="Autocomplete_e73a4" style="display: none; width: 300px; max-height: 400px;"></div></div></div></body></html>
