@@ -4,23 +4,30 @@ import re
 from os import listdir
 import sys
 
-#sys.setdefaultencoding("utf-8")
-
-class MyHTMLParser(HTMLParser):
+class HabraParser(HTMLParser):
 	parsing = False
 	skip    = False
+
+	#filterlist = [ ["p", ("class", "for_users_only_msg")] ]
+	filterlist = [ "code" ]
+	filtertag  = ""
 
 	def addtokens(self, s):
 		s = self.strip(s)
 		s = s.lower()
 
-		tokens = s.split()
-
-		print (s)
-		input()
+		if not s.isspace() and s != "":
+			self._print ("<" + s + ">")
+			input()
 
 	def strip(self, s):
-		return re.sub('(-{2}|[\.\u00A0\t\n\r\,\:;\(\)><!"?{}])', " ", s, 0, 0)
+		return re.sub('(-{2}|[\.\u00A0\u2014\t\n\r\,\:;\(\)><!"?{}\/])', " ", s, 0, 0)
+
+	def _print( self, data ):
+		if sys.platform == "win32":
+			print( data.encode('cp866', errors='replace').decode('cp866') )
+		else:
+			print( data )
 
 	def handle_starttag(self, tag, attrs):
 		if tag == "div":
@@ -30,19 +37,24 @@ class MyHTMLParser(HTMLParser):
 						self.parsing = True
 					elif v == "clear":
 						self.parsing = False
-		elif tag == "br":
-			self.skip = False
-		#else:
-		#	self.skip = True
+		else:
+			if tag in self.filterlist and not self.skip:
+				self.skip      = True
+				self.filtertag = tag
+
+	def handle_endtag(self, tag):
+		if self.skip and tag == self.filtertag:
+			self.skip      = False
+			self.filtertag = ""
 
 	def handle_data(self, data):
 		if self.parsing and not self.skip:
 			self.addtokens(data)
 
-class Habrabuilder():
+class HabraBuilder():
 	pathtofiles = "D:\\Study\\Информационный Поиск\\Курсовая\\Habrasearch\\Data\\"
-	filelist = []
-
+	filelist    = []
+	parser      = HabraParser()
 
 	def __init__( self ):
 
@@ -62,15 +74,12 @@ class Habrabuilder():
 		for fname in self.filelist:
 			with open( self.pathtofiles + fname, 'r', encoding='utf-8' ) as f:
 				data = f.read()
-
-				#self._print( data )
-
-				input()
+				self.parser.feed( data )
 
 
 #parser = MyHTMLParser()
 #parser.feed( page_source )
 
-index = Habrabuilder()
+index = HabraBuilder()
 
 index.buildindex()
